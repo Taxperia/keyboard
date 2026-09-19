@@ -1,0 +1,13 @@
+[Bb]in/
+[Oo]bj/
+artifacts/
+TestResults/
+.vs/
+.idea/
+.vscode/
+.freebuff/
+*.user
+*.suo
+*.nupkg
+*.snupkg
+*.log

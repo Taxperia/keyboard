@@ -1,0 +1,37 @@
+name: Hata bildirimi
+description: Tekrarlanabilir bir KeyBridge hatasını bildirin
+title: "[Hata]: "
+labels: [bug]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Hata
+      description: Ne oldu ve ne olmasını bekliyordunuz?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Tekrar adımları
+      placeholder: "1. ...\n2. ...\n3. ..."
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: KeyBridge sürümü
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows, çözünürlük ve ölçek
+      placeholder: Windows 11, 1920x1080, %125
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Ek bilgi
+      description: Ekran görüntüsü veya ilgili hata metnini ekleyin. Eşleştirme belirtecini paylaşmayın.

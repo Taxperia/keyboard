@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyName>KeyBridge</AssemblyName>
+    <RootNamespace>KeyBridge</RootNamespace>
+    <Version>0.2.0</Version>
+    <Authors>KeyBridge Contributors</Authors>
+    <Description>Share keyboard and mouse input between Windows computers on the same local network.</Description>
+    <Copyright>Copyright © 2026 Taxperia</Copyright>
+    <RepositoryUrl>https://github.com/Taxperia/keyboard</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/Taxperia/keyboard</PackageProjectUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE" Link="LICENSE" Pack="true" PackagePath="" />
+    <None Include="..\NOTICE" Link="NOTICE" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,18 @@
+name: Özellik isteği
+description: KeyBridge için bir iyileştirme önerin
+title: "[Öneri]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: İhtiyaç
+      description: Hangi kullanıcı sorununu çözmek istiyorsunuz?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Önerilen çözüm
+    validations:
+      required: true

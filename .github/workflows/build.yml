@@ -1,0 +1,40 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore
+        run: dotnet restore .\KeyBridge.sln
+
+      - name: Build
+        run: dotnet build .\KeyBridge.sln -c Release --no-restore
+
+      - name: Publish portable app
+        run: .\scripts\publish-release.ps1 -Mode framework-dependent
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: KeyBridge-win-x64
+          path: artifacts/publish/KeyBridge-win-x64/
+          if-no-files-found: error

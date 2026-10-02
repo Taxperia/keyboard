@@ -9,6 +9,10 @@ Windows 10/11 · .NET 8 · WPF · LAN only · Source-available, noncommercial li
 > [!IMPORTANT]
 > **KeyBridge is not an AnyDesk or TeamViewer replacement.** It does not provide an internet relay, a cloud account, cross-network connections, unattended access, or a public device-ID service. Both Windows PCs must be running KeyBridge on the same trusted local network, and the receiving PC must approve each new session. The live screen and control features work *within that scope*.
 
+![KeyBridge dashboard with local device details, connection modes, recent devices, and session controls](docs/images/dashboard.png)
+
+*KeyBridge 0.2.5 on Windows. The interface is currently in Turkish; the six-digit code in this example is time-limited.*
+
 ## At a glance
 
 | What KeyBridge does | What it does not do |

@@ -1,33 +1,26 @@
 # KeyBridge 0.2.5
 
-Bu sürüm, bilgisayarlar arasındaki klavye/fare kontrolünün güvenilirliğini ve uzak ekran akıcılığını iyileştirir.
+KeyBridge is a Windows desktop companion for **two PCs on the same trusted local network**. It is not an AnyDesk or TeamViewer replacement: there is no internet relay, cross-network connection, or unattended access. The receiving PC must approve each session.
 
-## Yenilikler
+## Highlights
 
-- Daha kompakt, tema uyumlu kontrol paneli ve ayarlar penceresi
-- Unicode karakterler yerine ölçeklenebilir vektör ikonlar
-- Oturumu kapatma ile iki bilgisayardaki eşleşmeyi kaldırma işlemlerinin ayrılması
-- `%100` ve `%125` gibi farklı DPI ölçeklerinde kenar ve köşeleri doğru eşleyen mutlak fare koordinatları
-- Per-Monitor V2 DPI farkındalığı
-- Fare ve klavye olayları için bloklamayan, sıralı TCP kontrol oturumu
-- Kodla bağlantıdan sonra Tam Kontrol modunun otomatik etkinleşmesi
-- Son Cihazlar'da kayıtlı cihaz için kodsuz bağlantı ve karşı bilgisayarda açık onay penceresi
-- İlk eşleştirme ile kayıtlı cihaza yeniden bağlanmayı ayıran düğme etiketleri
-- Font Awesome Free ikonları ve dar/geniş pencerelerde düzeltilmiş arama ve mod kartları
-- Özel ağ için TCP/UDP güvenlik duvarı kurulum betiği
-- Kodla eşleştirmede onaydan sonra UDP yanıtının kaybolmasına yol açan bekleme hatası giderildi
-- Cihaz listesindeki Eşleştir eylemi kodu seçilen bilgisayara doğrudan TCP ile gönderiyor
-- Bağlantıyı kabul eden bilgisayarda gelen oturum doğru gösteriliyor; yanıltıcı sürüm uyarısı kaldırıldı
-- GitHub Actions, issue şablonları ve katkı belgeleri
-- PolyForm Noncommercial 1.0.0 lisansı
+- Reconnect to a saved device from **Recent devices** without entering its code again, while still requiring approval on the receiving PC.
+- View the other PC's primary display, use the full-screen viewer, and optionally forward keyboard and mouse input.
+- Improved connection reliability after approval, including the code-based pairing response and incoming-session status.
+- Smoother input forwarding through a non-blocking, ordered TCP control session and improved screen-frame decoding.
+- Better mouse positioning across different display resolutions and DPI scales.
+- Clearer distinction between **Disconnect** (keep the pairing) and **Forget device** (remove it).
+- Refreshed dashboard and settings, scalable icons, and improved layouts for different window sizes.
+- A Private-network firewall setup script for the portable build.
 
-## Kurulum
+## Downloads
 
-`KeyBridge.exe` taşınabilir uygulamadır. İki bilgisayarda da aynı sürümü çalıştırın ve Windows Güvenlik Duvarı özel ağ iznini kabul edin.
+- **`KeyBridge-0.2.5-win-x64.exe`**: self-contained portable app; no separate .NET installation is required.
+- **`KeyBridge-0.2.5-win-x64.zip`**: the same portable app plus the license, notices, README, and firewall setup script. Extract the ZIP before running the app.
+- **`SHA256SUMS.txt`**: SHA-256 hashes for checking the downloaded files.
 
-## Gereksinimler
+Run the **same version on both PCs**, on the same trusted LAN. Windows 10 version 1809 or later, or Windows 11, is required. Allow KeyBridge through Windows Firewall on the **Private** network profile. Do not expose its ports to the public internet.
 
-- Windows 10 1809 veya daha yeni bir sürüm
-- Aynı yerel ağa bağlı iki bilgisayar
+The binaries are not code-signed; Windows may show a SmartScreen warning. Verify that the download came from this repository's release page and compare its SHA-256 hash before running it.
 
-Self-contained EXE için ayrıca .NET kurulumu gerekmez.
+For setup, limitations, and the security model, see the [README](README.md) and [security policy](SECURITY.md). KeyBridge is distributed under the [PolyForm Noncommercial License 1.0.0](LICENSE).

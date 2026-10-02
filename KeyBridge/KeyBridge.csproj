@@ -7,9 +7,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\KeyBridge.ico</ApplicationIcon>
     <AssemblyName>KeyBridge</AssemblyName>
     <RootNamespace>KeyBridge</RootNamespace>
-    <Version>0.2.0</Version>
+    <Version>0.2.5</Version>
     <Authors>KeyBridge Contributors</Authors>
     <Description>Share keyboard and mouse input between Windows computers on the same local network.</Description>
     <Copyright>Copyright © 2026 Taxperia</Copyright>
@@ -20,6 +21,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\KeyBridge.ico" />
+    <Resource Include="Assets\KeyBridge.png" />
+    <Resource Include="Assets\fa-solid-900.ttf" />
+    <Content Include="Assets\FONT-AWESOME-LICENSE.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\LICENSE" Link="LICENSE" Pack="true" PackagePath="" />
     <None Include="..\NOTICE" Link="NOTICE" Pack="true" PackagePath="" />
   </ItemGroup>

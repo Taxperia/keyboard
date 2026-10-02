@@ -22,6 +22,8 @@ public sealed class AppSettings
 
     public bool EnableMouseControl { get; set; } = true;
 
+    public bool EnableClipboardSync { get; set; }
+
     public bool StartWithWindows { get; set; }
 
     public PairedDevice? PairedDevice { get; set; }

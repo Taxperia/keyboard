@@ -1,5 +1,5 @@
 #define MyAppName "KeyBridge"
-#define MyAppVersion "0.2.0"
+#define MyAppVersion "0.2.5"
 #define MyAppPublisher "KeyBridge"
 #define MyAppExeName "KeyBridge.exe"
 #define PublishDir "..\artifacts\publish\KeyBridge-win-x64"
@@ -36,6 +36,8 @@ Name: "desktopicon"; Description: "Masaüstü kısayolu oluştur"; GroupDescript
 Source: "{#PublishDir}\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\LICENSE"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\NOTICE"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PublishDir}\Assets\FONT-AWESOME-LICENSE.txt"; DestDir: "{app}\Assets"; Flags: ignoreversion
+Source: "{#PublishDir}\setup-private-network.ps1"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

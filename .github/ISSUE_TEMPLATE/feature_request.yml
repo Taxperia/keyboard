@@ -1,18 +1,18 @@
-name: Özellik isteği
-description: KeyBridge için bir iyileştirme önerin
-title: "[Öneri]: "
+name: Feature request
+description: Suggest a KeyBridge improvement
+title: "[Feature]: "
 labels: [enhancement]
 body:
   - type: textarea
     id: problem
     attributes:
-      label: İhtiyaç
-      description: Hangi kullanıcı sorununu çözmek istiyorsunuz?
+      label: Problem to solve
+      description: Which user problem would this address?
     validations:
       required: true
   - type: textarea
     id: solution
     attributes:
-      label: Önerilen çözüm
+      label: Proposed solution
     validations:
       required: true

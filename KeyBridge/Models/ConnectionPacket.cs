@@ -8,5 +8,5 @@ public sealed class ConnectionPacket
 
     public string PairingToken { get; set; } = "";
 
-    public string Action { get; set; } = "disconnect";
+    public string Action { get; set; } = "end-session";
 }

@@ -1,37 +1,37 @@
-name: Hata bildirimi
-description: Tekrarlanabilir bir KeyBridge hatasını bildirin
-title: "[Hata]: "
+name: Bug report
+description: Report a reproducible KeyBridge problem
+title: "[Bug]: "
 labels: [bug]
 body:
   - type: textarea
     id: description
     attributes:
-      label: Hata
-      description: Ne oldu ve ne olmasını bekliyordunuz?
+      label: What happened?
+      description: What happened, and what did you expect instead?
     validations:
       required: true
   - type: textarea
     id: steps
     attributes:
-      label: Tekrar adımları
+      label: Steps to reproduce
       placeholder: "1. ...\n2. ...\n3. ..."
     validations:
       required: true
   - type: input
     id: version
     attributes:
-      label: KeyBridge sürümü
+      label: KeyBridge version on both PCs
     validations:
       required: true
   - type: input
     id: windows
     attributes:
-      label: Windows, çözünürlük ve ölçek
-      placeholder: Windows 11, 1920x1080, %125
+      label: Windows version, display resolution, and scaling on both PCs
+      placeholder: Windows 11, 1920x1080, 125%
     validations:
       required: true
   - type: textarea
     id: logs
     attributes:
-      label: Ek bilgi
-      description: Ekran görüntüsü veya ilgili hata metnini ekleyin. Eşleştirme belirtecini paylaşmayın.
+      label: Additional context
+      description: Add relevant status messages or screenshots. Remove connection codes, pairing tokens, and private information. Do not report security vulnerabilities here; see SECURITY.md.

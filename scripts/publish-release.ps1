@@ -35,6 +35,7 @@ if ($LASTEXITCODE -ne 0) {
 Copy-Item -LiteralPath (Join-Path $root "LICENSE") -Destination (Join-Path $output "LICENSE") -Force
 Copy-Item -LiteralPath (Join-Path $root "NOTICE") -Destination (Join-Path $output "NOTICE") -Force
 Copy-Item -LiteralPath (Join-Path $root "README.md") -Destination (Join-Path $output "README.md") -Force
+Copy-Item -LiteralPath (Join-Path $root "scripts\setup-private-network.ps1") -Destination (Join-Path $output "setup-private-network.ps1") -Force
 
 Write-Host ""
 Write-Host "KeyBridge publish output:"

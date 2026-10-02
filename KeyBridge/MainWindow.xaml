@@ -3,977 +3,256 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"
-        Title="KeyBridge"
-        Width="430"
-        Height="332"
-        WindowStartupLocation="CenterScreen"
-        WindowStyle="None"
-        ResizeMode="NoResize"
-        AllowsTransparency="True"
-        Background="Transparent"
-        Opacity="0"
-        SizeChanged="Window_SizeChanged"
-        PreviewKeyDown="Window_PreviewKeyDown"
-        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        mc:Ignorable="d" Title="KeyBridge"
+        Width="1480" Height="800" MinWidth="1000" MinHeight="600"
+        WindowStartupLocation="CenterScreen" WindowStyle="None"
+        ResizeMode="CanResize" AllowsTransparency="False" Background="#F6F9FC"
+        Icon="Assets/KeyBridge.ico"
+        FontFamily="Segoe UI" PreviewKeyDown="Window_PreviewKeyDown"
+        UseLayoutRounding="True" SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="ClearType">
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="0" ResizeBorderThickness="6" CornerRadius="0" GlassFrameThickness="0"/>
+    </shell:WindowChrome.WindowChrome>
     <Window.Resources>
-        <SolidColorBrush x:Key="AppBackgroundBrush" Color="Transparent"/>
-        <SolidColorBrush x:Key="PanelBrush" Color="#141414"/>
-        <SolidColorBrush x:Key="PanelAltBrush" Color="#3A3A3A"/>
-        <SolidColorBrush x:Key="BorderBrushSoft" Color="#242424"/>
-        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#FFFFFF"/>
-        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#B9B9B9"/>
-        <SolidColorBrush x:Key="AccentBrush" Color="#FFFFFF"/>
-        <SolidColorBrush x:Key="AccentDarkBrush" Color="#3A3A3A"/>
-        <SolidColorBrush x:Key="WarningBrush" Color="#F2B84B"/>
+        <SolidColorBrush x:Key="Ink" Color="#101828"/>
+        <SolidColorBrush x:Key="Muted" Color="#64748B"/>
+        <SolidColorBrush x:Key="Blue" Color="#0A84FF"/>
+        <SolidColorBrush x:Key="Line" Color="#D9E2EC"/>
+        <SolidColorBrush x:Key="Green" Color="#12B76A"/>
 
-        <Style x:Key="TitleText" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
-            <Setter Property="FontWeight" Value="Regular"/>
-            <Setter Property="FontSize" Value="36"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
+        <Style x:Key="IconText" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="pack://application:,,,/KeyBridge;component/Assets/#Font Awesome 6 Free Solid"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="{StaticResource Ink}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
-
-        <Style x:Key="SectionText" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-        </Style>
-
-        <Style x:Key="BodyText" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="LineHeight" Value="21"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-        </Style>
-
-        <Style x:Key="BaseButton" TargetType="Button">
-            <Setter Property="Foreground" Value="#FFFFFF"/>
-            <Setter Property="Background" Value="#3A3A3A"/>
-            <Setter Property="BorderBrush" Value="#3A3A3A"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="16,10"/>
-            <Setter Property="MinHeight" Value="42"/>
+        <Style x:Key="IconButton" TargetType="Button">
+            <Setter Property="Width" Value="38"/><Setter Property="Height" Value="38"/>
+            <Setter Property="Background" Value="Transparent"/><Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="8"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              RecognizesAccessKey="True"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Opacity" Value="0.86"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Opacity" Value="0.45"/>
-                                <Setter Property="Cursor" Value="Arrow"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button">
+                <Border x:Name="Chrome" Background="{TemplateBinding Background}" CornerRadius="6"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
+                <ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Chrome" Property="Background" Value="#EAF2F9"/></Trigger></ControlTemplate.Triggers>
+            </ControlTemplate></Setter.Value></Setter>
         </Style>
-
-        <Style x:Key="GhostButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
-            <Setter Property="Background" Value="{DynamicResource PanelAltBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSoft}"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
-        </Style>
-
-        <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
-            <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
-            <Setter Property="Foreground" Value="#FFFFFF"/>
-        </Style>
-
-        <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="#A94A45"/>
-            <Setter Property="Foreground" Value="#FF8A80"/>
-        </Style>
-
-        <Style x:Key="WindowControlButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
-            <Setter Property="Width" Value="32"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="MinHeight" Value="30"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Background" Value="#303030"/>
-            <Setter Property="BorderBrush" Value="#303030"/>
-            <Setter Property="Foreground" Value="#FFFFFF"/>
-            <Setter Property="FontSize" Value="14"/>
-        </Style>
-
-        <Style x:Key="CardBorder" TargetType="Border">
-            <Setter Property="Background" Value="{DynamicResource PanelBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSoft}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="28"/>
-            <Setter Property="Padding" Value="28"/>
-        </Style>
-
-        <Style x:Key="ArrowButton" TargetType="Button" BasedOn="{StaticResource GhostButton}">
-            <Setter Property="Width" Value="50"/>
-            <Setter Property="Height" Value="50"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="8">
-                            <Viewbox Width="18" Height="18"
-                                     HorizontalAlignment="Center"
-                                     VerticalAlignment="Center">
-                                <Path Data="M4,2 L12,10 L4,18"
-                                      Stroke="{DynamicResource TextPrimaryBrush}"
-                                      StrokeThickness="3"
-                                      StrokeStartLineCap="Round"
-                                      StrokeEndLineCap="Round"
-                                      StrokeLineJoin="Round"
-                                      Fill="Transparent"/>
-                            </Viewbox>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Opacity" Value="0.86"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Opacity" Value="0.45"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="PreviewButton" TargetType="Button" BasedOn="{StaticResource GhostButton}">
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="MinHeight" Value="120"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-        </Style>
-
-        <Style x:Key="CardCheckBox" TargetType="CheckBox">
-            <Setter Property="Foreground" Value="#FFFFFF"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Width" Value="140"/>
-            <Setter Property="Height" Value="140"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="CheckBox">
-                        <Border x:Name="CheckBoxBorder"
-                                Width="140"
-                                Height="140"
-                                Background="#3A3A3A"
-                                BorderBrush="#3A3A3A"
-                                BorderThickness="2"
-                                CornerRadius="8">
-                            <Grid>
-                                <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"/>
-                                <Border Width="24"
-                                        Height="24"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Top"
-                                        Margin="0,8,8,0"
-                                        Background="#3A3A3A"
-                                        BorderBrush="#FFFFFF"
-                                        BorderThickness="2"
-                                        CornerRadius="5">
-                                    <Path x:Name="CheckIcon"
-                                          Data="M5,12 L10,17 L19,6"
-                                          Stroke="#FFFFFF"
-                                          StrokeThickness="3"
-                                          StrokeStartLineCap="Round"
-                                          StrokeEndLineCap="Round"
-                                          StrokeLineJoin="Round"
-                                          Visibility="Collapsed"/>
-                                </Border>
-                            </Grid>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="CheckBoxBorder" Property="BorderBrush" Value="#FFFFFF"/>
-                                <Setter TargetName="CheckIcon" Property="Visibility" Value="Visible"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Opacity" Value="0.88"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="SettingsNavButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
-            <Setter Property="Height" Value="38"/>
-            <Setter Property="MinHeight" Value="38"/>
-            <Setter Property="Padding" Value="12,0"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
-            <Setter Property="FontSize" Value="13"/>
+        <Style x:Key="NavButton" TargetType="Button">
+            <Setter Property="Height" Value="54"/><Setter Property="Margin" Value="10,2"/><Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Background" Value="Transparent"/><Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#334155"/><Setter Property="FontSize" Value="15"/><Setter Property="Cursor" Value="Hand"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button">
+                <Border x:Name="NavChrome" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}"><ContentPresenter VerticalAlignment="Center"/></Border>
+                <ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="NavChrome" Property="Background" Value="#E7F1F9"/></Trigger></ControlTemplate.Triggers>
+            </ControlTemplate></Setter.Value></Setter>
         </Style>
-
-        <Style x:Key="SettingsRowBorder" TargetType="Border">
-            <Setter Property="Background" Value="{DynamicResource PanelAltBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSoft}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="10"/>
-            <Setter Property="Padding" Value="16,12"/>
-            <Setter Property="Margin" Value="0,0,0,9"/>
+        <Style x:Key="ActiveNavButton" TargetType="Button" BasedOn="{StaticResource NavButton}">
+            <Setter Property="Background" Value="#DDEFFC"/><Setter Property="Foreground" Value="#064B7B"/><Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
-
-        <Style x:Key="SettingsLabelText" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="FontSize" Value="13"/>
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="White"/><Setter Property="BorderBrush" Value="{StaticResource Line}"/><Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/><Setter Property="Padding" Value="24"/>
+            <Setter Property="Effect"><Setter.Value><DropShadowEffect BlurRadius="18" ShadowDepth="2" Opacity="0.08" Color="#4F6B82"/></Setter.Value></Setter>
         </Style>
-
-        <Style x:Key="SettingsDescriptionText" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="Margin" Value="0,4,0,0"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/><Setter Property="Background" Value="#FA3E32"/><Setter Property="BorderBrush" Value="#FA3E32"/>
+            <Setter Property="BorderThickness" Value="1"/><Setter Property="FontSize" Value="15"/><Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="18,0"/><Setter Property="Height" Value="54"/><Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button">
+                <Border x:Name="Chrome" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="8" Padding="{TemplateBinding Padding}"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
+                <ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Chrome" Property="Background" Value="#E83228"/></Trigger><Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value=".5"/></Trigger></ControlTemplate.Triggers>
+            </ControlTemplate></Setter.Value></Setter>
         </Style>
-
-        <Style x:Key="SwitchCheckBox" TargetType="CheckBox">
-            <Setter Property="Width" Value="40"/>
-            <Setter Property="Height" Value="22"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="CheckBox">
-                        <Border x:Name="SwitchTrack"
-                                Width="40"
-                                Height="22"
-                                Background="#CFCFCF"
-                                CornerRadius="11">
-                            <Border x:Name="SwitchKnob"
-                                    Width="16"
-                                    Height="16"
-                                    HorizontalAlignment="Left"
-                                    Margin="3,0,0,0"
-                                    Background="#FFFFFF"
-                                    CornerRadius="8"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="SwitchTrack" Property="Background" Value="#22C55E"/>
-                                <Setter TargetName="SwitchKnob" Property="HorizontalAlignment" Value="Right"/>
-                                <Setter TargetName="SwitchKnob" Property="Margin" Value="0,0,3,0"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        <Style x:Key="OutlineButton" TargetType="Button">
+            <Setter Property="Foreground" Value="{StaticResource Ink}"/><Setter Property="Background" Value="White"/><Setter Property="BorderBrush" Value="#CED8E3"/>
+            <Setter Property="BorderThickness" Value="1"/><Setter Property="FontWeight" Value="SemiBold"/><Setter Property="Padding" Value="14,8"/><Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button">
+                <Border x:Name="Chrome" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="7" Padding="{TemplateBinding Padding}"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
+                <ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Chrome" Property="Background" Value="#F1F6FA"/></Trigger></ControlTemplate.Triggers>
+            </ControlTemplate></Setter.Value></Setter>
         </Style>
-
-        <Style x:Key="ModalCloseButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
-            <Setter Property="Width" Value="28"/>
-            <Setter Property="Height" Value="28"/>
-            <Setter Property="MinHeight" Value="28"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Background" Value="{DynamicResource PanelAltBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSoft}"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
-        </Style>
-
-        <Style TargetType="ComboBox">
-            <Setter Property="Background" Value="#3A3A3A"/>
-            <Setter Property="Foreground" Value="#FFFFFF"/>
-            <Setter Property="BorderBrush" Value="#4A4A4A"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="16,8"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="MinHeight" Value="44"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBox">
-                        <Grid>
-                            <ToggleButton Background="{TemplateBinding Background}"
-                                          BorderBrush="{TemplateBinding BorderBrush}"
-                                          BorderThickness="{TemplateBinding BorderThickness}"
-                                          ClickMode="Press"
-                                          Focusable="False"
-                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
-                                <ToggleButton.Template>
-                                    <ControlTemplate TargetType="ToggleButton">
-                                        <Border x:Name="ToggleChrome"
-                                                Background="{TemplateBinding Background}"
-                                                BorderBrush="{TemplateBinding BorderBrush}"
-                                                BorderThickness="{TemplateBinding BorderThickness}"
-                                                CornerRadius="8">
-                                            <ContentPresenter/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="ToggleChrome" Property="Background" Value="#444444"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </ToggleButton.Template>
-                                <Grid Height="{TemplateBinding MinHeight}">
-                                    <ContentPresenter Margin="16,0,46,0"
-                                                      HorizontalAlignment="Left"
-                                                      VerticalAlignment="Center"
-                                                      Content="{TemplateBinding SelectionBoxItem}"
-                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                                      ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
-                                                      RecognizesAccessKey="True"/>
-                                    <Path Data="M4,6 L10,12 L16,6"
-                                          Stroke="#FFFFFF"
-                                          StrokeThickness="2.6"
-                                          StrokeStartLineCap="Round"
-                                          StrokeEndLineCap="Round"
-                                          StrokeLineJoin="Round"
-                                          Fill="Transparent"
-                                          HorizontalAlignment="Right"
-                                          VerticalAlignment="Center"
-                                          Margin="0,0,16,0"/>
-                                </Grid>
-                            </ToggleButton>
-
-                            <Popup x:Name="PART_Popup"
-                                   AllowsTransparency="True"
-                                   Focusable="False"
-                                   IsOpen="{TemplateBinding IsDropDownOpen}"
-                                   Placement="Bottom"
-                                   PopupAnimation="Fade">
-                                <Border MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
-                                        Background="#3A3A3A"
-                                        BorderBrush="#4A4A4A"
-                                        BorderThickness="1"
-                                        CornerRadius="8"
-                                        Margin="0,6,0,0">
-                                    <ScrollViewer MaxHeight="180">
-                                        <ItemsPresenter/>
-                                    </ScrollViewer>
-                                </Border>
-                            </Popup>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style TargetType="ComboBoxItem">
-            <Setter Property="Background" Value="#3A3A3A"/>
-            <Setter Property="Foreground" Value="#FFFFFF"/>
-            <Setter Property="Padding" Value="14,9"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBoxItem">
-                        <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
-                            <ContentPresenter/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsHighlighted" Value="True">
-                                <Setter Property="Background" Value="#4A4A4A"/>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="#565656"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <Style TargetType="TextBox">
-            <Setter Property="Background" Value="#3A3A3A"/>
-            <Setter Property="Foreground" Value="#FFFFFF"/>
-            <Setter Property="BorderBrush" Value="#3A3A3A"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="12,9"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="CaretBrush" Value="#FFFFFF"/>
+            <Setter Property="Foreground" Value="{StaticResource Ink}"/><Setter Property="Background" Value="#F2F5F8"/><Setter Property="BorderBrush" Value="#E4EAF0"/>
+            <Setter Property="BorderThickness" Value="1"/><Setter Property="Padding" Value="10,0"/><Setter Property="FontSize" Value="15"/><Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="TextBox"><Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="7"><ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/></Border></ControlTemplate></Setter.Value></Setter>
         </Style>
-
-        <Style TargetType="ListBox">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="#2A2A2A"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Foreground" Value="#FFFFFF"/>
-        </Style>
-
-        <Style TargetType="ListBoxItem">
-            <Setter Property="Padding" Value="10"/>
-            <Setter Property="Margin" Value="6"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Style x:Key="ToggleSwitch" TargetType="CheckBox">
+            <Setter Property="Width" Value="40"/><Setter Property="Height" Value="22"/><Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="CheckBox"><Border x:Name="Track" Background="#CBD5E1" CornerRadius="11"><Border x:Name="Thumb" Width="16" Height="16" Margin="3" HorizontalAlignment="Left" Background="White" CornerRadius="8"/></Border><ControlTemplate.Triggers><Trigger Property="IsChecked" Value="True"><Setter TargetName="Track" Property="Background" Value="#0A84FF"/><Setter TargetName="Thumb" Property="HorizontalAlignment" Value="Right"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter>
         </Style>
     </Window.Resources>
 
-    <Grid Background="Transparent">
-        <Border Margin="1"
-                Background="{DynamicResource PanelBrush}"
-                BorderBrush="{DynamicResource BorderBrushSoft}"
-                BorderThickness="1"
-                CornerRadius="28"/>
+    <Grid>
+        <Border Background="#F6F9FC" BorderBrush="#C8D4DF" BorderThickness="1" CornerRadius="13"><Border.Effect><DropShadowEffect BlurRadius="30" ShadowDepth="8" Opacity=".25" Color="#314A60"/></Border.Effect></Border>
+        <Grid ClipToBounds="True">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="240"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
 
-        <Grid x:Name="ShellGrid" Background="Transparent">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition x:Name="SidebarColumn" Width="0"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Border x:Name="SidebarPanel" Visibility="Collapsed">
-                <StackPanel>
-                    <TextBlock x:Name="SidebarSubtitle"/>
-                    <TextBlock x:Name="SidebarStatus"/>
-                    <Border x:Name="StepWelcome"/>
-                    <Border x:Name="StepLanguage"/>
-                    <Border x:Name="StepTheme"/>
-                    <Border x:Name="StepInputDevices"/>
-                    <Border x:Name="StepRole"/>
-                    <Border x:Name="StepDevices"/>
-                    <Border x:Name="StepDashboard"/>
-                </StackPanel>
+            <Border Background="#F8FAFC" BorderBrush="#DEE6EE" BorderThickness="0,0,1,0" CornerRadius="13,0,0,13">
+                <Grid>
+                    <Grid.RowDefinitions><RowDefinition Height="96"/><RowDefinition Height="*"/><RowDefinition Height="178"/><RowDefinition Height="92"/></Grid.RowDefinitions>
+                    <Grid Margin="28,0,18,0">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="44"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                        <Grid Width="38" Height="38" VerticalAlignment="Center">
+                            <Border Width="31" Height="13" CornerRadius="7" Background="#0E7490" RenderTransformOrigin=".5,.5"><Border.RenderTransform><RotateTransform Angle="-35"/></Border.RenderTransform></Border>
+                            <Border Width="31" Height="13" CornerRadius="7" Background="#12B8B0" Margin="8,-8,0,0" RenderTransformOrigin=".5,.5"><Border.RenderTransform><RotateTransform Angle="-35"/></Border.RenderTransform></Border>
+                            <Ellipse Width="10" Height="10" Fill="#F8FAFC"/>
+                        </Grid>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="8,0,0,0"><TextBlock Text="KeyBridge" FontSize="25" FontWeight="Bold" Foreground="#0B1220"/><TextBlock Text="Her yerde, yanınızda." FontSize="10" Foreground="{StaticResource Muted}"/></StackPanel>
+                    </Grid>
+                    <StackPanel Grid.Row="1" Margin="0,12,0,0">
+                        <Button x:Name="HomeSidebarButton" AutomationProperties.Name="Ana Sayfa" Style="{StaticResource ActiveNavButton}" Click="HomeNavButton_Click"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xF015;" Style="{StaticResource IconText}" Foreground="#075985"/><TextBlock Text="Ana Sayfa" Margin="22,0,0,0" VerticalAlignment="Center"/></StackPanel></Button>
+                        <Button x:Name="DevicesSidebarButton" AutomationProperties.Name="Cihazlar" Style="{StaticResource NavButton}" Click="DevicesNavButton_Click"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xF109;" Style="{StaticResource IconText}"/><TextBlock Text="Cihazlar" Margin="22,0,0,0" VerticalAlignment="Center"/></StackPanel></Button>
+                        <Button x:Name="ConnectionsSidebarButton" AutomationProperties.Name="Bağlantılar" Style="{StaticResource NavButton}" Click="ConnectionsNavButton_Click"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xF0C1;" Style="{StaticResource IconText}"/><TextBlock Text="Bağlantılar" Margin="22,0,0,0" VerticalAlignment="Center"/></StackPanel></Button>
+                        <Button x:Name="HistorySidebarButton" AutomationProperties.Name="Geçmiş" Style="{StaticResource NavButton}" Click="HistoryNavButton_Click"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xF017;" Style="{StaticResource IconText}"/><TextBlock Text="Geçmiş" Margin="22,0,0,0" VerticalAlignment="Center"/></StackPanel></Button>
+                        <Button x:Name="SettingsSidebarButton" AutomationProperties.Name="Ayarlar" Style="{StaticResource NavButton}" Click="SettingsNavButton_Click"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xF013;" Style="{StaticResource IconText}"/><TextBlock Text="Ayarlar" Margin="22,0,0,0" VerticalAlignment="Center"/></StackPanel></Button>
+                    </StackPanel>
+                    <Border Grid.Row="2" Margin="18,10" Padding="18" Background="#E8F1F8" CornerRadius="9">
+                        <Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="42"/></Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal"><TextBlock Text="&#xF024;" Style="{StaticResource IconText}" Foreground="#F4A300"/><TextBlock Text="Tam Sürüm" Margin="12,0,0,0" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource Ink}"/></StackPanel>
+                            <TextBlock Grid.Row="1" Text="Tüm özellikler bu sürümde etkin." Margin="34,10,0,0" FontSize="12" Foreground="{StaticResource Muted}" TextWrapping="Wrap"/>
+                            <Button Grid.Row="2" Content="Özellikleri Gör" Style="{StaticResource OutlineButton}" Foreground="#075985" Click="UpgradeButton_Click"/>
+                        </Grid>
+                    </Border>
+                    <StackPanel Grid.Row="3" Margin="26,4,16,0"><StackPanel Orientation="Horizontal"><Ellipse Width="11" Height="11" Fill="{StaticResource Green}" VerticalAlignment="Center"/><TextBlock x:Name="SidebarStatusText" Text="Tüm sistemler çalışıyor" Margin="11,0,0,0" FontSize="11" Foreground="{StaticResource Muted}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/></StackPanel><TextBlock Text="KeyBridge v0.2.5" FontSize="11" Foreground="#8795A6" Margin="0,18,0,0"/></StackPanel>
+                </Grid>
             </Border>
 
-            <Grid Grid.Column="1" Background="Transparent">
-                <Border x:Name="TopBar"
-                        Panel.ZIndex="20"
-                        Visibility="Collapsed"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Bottom"
-                        Margin="20,0,20,16"
-                        Padding="14,9"
-                        Background="{DynamicResource PanelAltBrush}"
-                        BorderBrush="{DynamicResource BorderBrushSoft}"
-                        BorderThickness="1"
-                        CornerRadius="18">
-                    <StackPanel Orientation="Horizontal">
-                        <Ellipse Width="7" Height="7" Fill="{DynamicResource AccentBrush}" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="TopStatusText" Text="Hazır" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="12" Margin="9,0,0,0"/>
-                    </StackPanel>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions><RowDefinition Height="76"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                <Border Background="#F8FAFC" BorderBrush="#E4EAF0" BorderThickness="0,0,0,1" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                    <Grid Margin="20,0,12,0">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="230"/><ColumnDefinition Width="130"/></Grid.ColumnDefinitions>
+                        <Grid Height="42" MaxWidth="650" HorizontalAlignment="Stretch" Margin="0,0,14,0"><TextBox x:Name="SearchBox" TextChanged="SearchBox_TextChanged" GotKeyboardFocus="SearchBox_GotKeyboardFocus" LostKeyboardFocus="SearchBox_LostKeyboardFocus" Padding="36,0,68,0" Background="White" BorderBrush="#DCE4EC"/><TextBlock Text="&#xF002;" Style="{StaticResource IconText}" HorizontalAlignment="Left" Margin="14,0,0,0" IsHitTestVisible="False"/><TextBlock x:Name="SearchPlaceholder" Text="Cihaz adı veya IP adresi ara..." Foreground="#64748B" FontSize="13" VerticalAlignment="Center" Margin="36,0,0,0" IsHitTestVisible="False"/><Border HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Padding="7,3" Background="#F8FAFC" BorderBrush="#D8E1EA" BorderThickness="1" CornerRadius="5" IsHitTestVisible="False"><TextBlock Text="Ctrl + K" FontSize="11" Foreground="#64748B"/></Border></Grid>
+                        <Grid Grid.Column="1" HorizontalAlignment="Right"><Grid.ColumnDefinitions><ColumnDefinition Width="54"/><ColumnDefinition Width="1"/><ColumnDefinition Width="64"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><Button x:Name="NotificationButton" Style="{StaticResource IconButton}" ToolTip="Bildirimler" Click="NotificationButton_Click"><Grid><TextBlock Text="&#xF0F3;" Style="{StaticResource IconText}"/><Ellipse x:Name="NotificationDot" Width="6" Height="6" Fill="#0A84FF" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,5,0"/></Grid></Button><Border Grid.Column="1" Width="1" Height="38" Background="#E5EBF1"/><Border Grid.Column="2" Width="39" Height="39" CornerRadius="20" Background="#2663D8" HorizontalAlignment="Center"><TextBlock Text="KB" Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><StackPanel Grid.Column="3" VerticalAlignment="Center"><TextBlock Text="Merhaba," FontSize="11" Foreground="{StaticResource Muted}"/><TextBlock x:Name="HeaderDeviceNameText" Text="Bu Bilgisayar" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource Ink}"/></StackPanel></Grid>
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right"><Button Style="{StaticResource IconButton}" Click="MinimizeWindowButton_Click"><TextBlock Text="&#xF068;" Style="{StaticResource IconText}" FontSize="14"/></Button><Button x:Name="MaximizeWindowButton" Style="{StaticResource IconButton}" Click="MaximizeWindowButton_Click"><TextBlock Text="&#xF065;" Style="{StaticResource IconText}" FontSize="13"/></Button><Button Style="{StaticResource IconButton}" Click="CloseWindowButton_Click"><TextBlock Text="&#xF00D;" Style="{StaticResource IconText}" FontSize="16"/></Button></StackPanel>
+                    </Grid>
                 </Border>
 
-                <Grid x:Name="PageHost" Background="Transparent">
-                    <Grid x:Name="WelcomePage">
-                        <Border Width="372" Height="274" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource CardBorder}" Padding="54,45,54,20">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="Tek klavye,&#x0a;iki bilgisayar,&#x0a;kontrol sende." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="34" LineHeight="43" TextWrapping="Wrap"/>
-                                <Button Grid.Row="1" HorizontalAlignment="Center" Style="{StaticResource ArrowButton}" Click="StartButton_Click"/>
-                            </Grid>
-                        </Border>
-                    </Grid>
+                <ScrollViewer Grid.Row="1" Margin="18,16,18,14" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center"><Grid Height="690" MaxWidth="1480">
+                    <Grid.RowDefinitions><RowDefinition Height="2.05*"/><RowDefinition Height="2.05*"/><RowDefinition Height="72"/></Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="1.03*"/><ColumnDefinition Width="1.05*"/></Grid.ColumnDefinitions>
 
-                    <Grid x:Name="LanguagePage" Visibility="Collapsed">
-                        <Border Width="372" Height="274" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource CardBorder}" Padding="28,45,28,20">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <ComboBox x:Name="LanguageComboBox" SelectedIndex="0" SelectionChanged="LanguageComboBox_SelectionChanged">
-                                    <ComboBoxItem Tag="Turkish" Content="Dil Seçin"/>
-                                    <ComboBoxItem Tag="Turkish" Content="Türkçe"/>
-                                    <ComboBoxItem Tag="English" Content="English"/>
-                                </ComboBox>
-                                <TextBlock Grid.Row="1" Text="Arayüz dilini seçin." Style="{StaticResource BodyText}" Margin="4,22,4,0"/>
-                                <Button Grid.Row="2" HorizontalAlignment="Center" Style="{StaticResource ArrowButton}" Click="LanguageNextButton_Click"/>
+                    <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,7,7">
+                        <Grid><Grid.RowDefinitions><RowDefinition Height="60"/><RowDefinition Height="*"/><RowDefinition Height="50"/></Grid.RowDefinitions>
+                            <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="56"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock Text="&#xF109;" Style="{StaticResource IconText}" FontSize="37" Foreground="#064F7D"/><StackPanel Grid.Column="1" VerticalAlignment="Center"><TextBlock Text="Bu Bilgisayar" FontSize="21" FontWeight="Bold" Foreground="{StaticResource Ink}"/><TextBlock Text="Bu cihazı başkalarının bağlantı kurması için paylaşın." FontSize="12" Foreground="{StaticResource Muted}" Margin="0,4,0,0"/></StackPanel><Border Grid.Column="2" Background="#E6F8EF" CornerRadius="16" Padding="13,7" VerticalAlignment="Top"><StackPanel Orientation="Horizontal"><Ellipse Width="8" Height="8" Fill="{StaticResource Green}"/><TextBlock Text="Çevrimiçi" Margin="8,0,5,0" Foreground="#087A44" FontSize="12"/><TextBlock Text="&#xF107;" Style="{StaticResource IconText}" FontSize="11" Foreground="#087A44"/></StackPanel></Border></Grid>
+                            <Grid Grid.Row="1" Margin="0,8,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="165"/><ColumnDefinition Width="*"/><ColumnDefinition Width="48"/></Grid.ColumnDefinitions><Grid.RowDefinitions><RowDefinition Height="1*"/><RowDefinition Height="1.22*"/><RowDefinition Height="1*"/></Grid.RowDefinitions>
+                                <TextBlock Text="Cihaz Adı" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/><Border Grid.Column="1" Background="#F1F4F7" CornerRadius="7" Margin="0,3"><TextBlock x:Name="LocalDeviceNameText" FontSize="14" VerticalAlignment="Center" Margin="16,0"/></Border><Button Grid.Column="2" Style="{StaticResource IconButton}" Click="CopyDeviceNameButton_Click" ToolTip="Cihaz adını kopyala"><TextBlock Text="&#xF0C5;" Style="{StaticResource IconText}" FontSize="17"/></Button>
+                                <TextBlock Grid.Row="1" Text="Bağlantı Kodu" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/><Border Grid.Row="1" Grid.Column="1" Background="#F1F4F7" CornerRadius="7" Margin="0,3"><TextBlock x:Name="PairingCodeText" Text="--- ---" FontSize="28" FontWeight="Bold" VerticalAlignment="Center" Margin="16,0"/></Border><Button Grid.Row="1" Grid.Column="2" Style="{StaticResource IconButton}" Click="CopyPairingCodeButton_Click" ToolTip="Bağlantı kodunu kopyala"><TextBlock Text="&#xF0C5;" Style="{StaticResource IconText}" FontSize="17"/></Button>
+                                <TextBlock Grid.Row="2" Text="Erişim Şifresi" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/><Border Grid.Row="2" Grid.Column="1" Background="#F1F4F7" CornerRadius="7" Margin="0,3" Cursor="Hand" MouseLeftButtonDown="AccessPassword_MouseLeftButtonDown"><Grid><TextBlock x:Name="AccessPasswordText" Text="••••••" FontSize="20" VerticalAlignment="Center" Margin="16,0"/><TextBlock Text="&#xF06E;" Style="{StaticResource IconText}" FontSize="16" HorizontalAlignment="Right" Margin="0,0,14,0" Foreground="#667085"/></Grid></Border><Button Grid.Row="2" Grid.Column="2" Style="{StaticResource IconButton}" Click="GenerateCodeButton_Click" ToolTip="Yeni kod üret"><TextBlock Text="&#xF2F1;" Style="{StaticResource IconText}" FontSize="17"/></Button>
                             </Grid>
-                        </Border>
-                    </Grid>
+                            <Grid Grid.Row="2"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="130"/></Grid.ColumnDefinitions><Border Background="#F0F6FB" CornerRadius="7" Padding="14,0"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xF3ED;" Style="{StaticResource IconText}" Foreground="#63A7E8" FontSize="18"/><TextBlock Text="Bu bilgilerle diğer kişiler bu cihazınıza bağlanabilir." FontSize="11" Foreground="{StaticResource Muted}" Margin="12,0,0,0" VerticalAlignment="Center"/></StackPanel></Border><Button Grid.Column="1" Content="Paylaş" Margin="10,0,0,0" Style="{StaticResource OutlineButton}" Click="ShareButton_Click"/></Grid>
+                        </Grid>
+                    </Border>
 
-                    <Grid x:Name="ThemePage" Visibility="Collapsed">
-                        <Border Width="548" Height="388" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource CardBorder}" Padding="34,36,34,24">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="Tema Seçin" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="36" HorizontalAlignment="Center"/>
-                                <UniformGrid x:Name="ThemeOptionsGrid" Grid.Row="1" Columns="3" Margin="0,58,0,20">
-                                    <Button Tag="Light" Style="{StaticResource PreviewButton}" Click="ThemeButton_Click" Margin="0,0,14,0">
-                                        <Border Width="140" Height="120" CornerRadius="8" Background="#ECECEC" Padding="12">
-                                            <Grid>
-                                                <Border Height="18" VerticalAlignment="Top" Background="#FFFFFF" CornerRadius="4"/>
-                                                <Border Width="48" HorizontalAlignment="Left" Margin="0,34,0,0" Background="#D9D9D9" CornerRadius="4"/>
-                                                <Border Width="66" HorizontalAlignment="Right" Margin="0,34,0,0" Background="#BEBEBE" CornerRadius="4"/>
-                                            </Grid>
-                                        </Border>
-                                    </Button>
-                                    <Button Tag="Dark" Style="{StaticResource PreviewButton}" Click="ThemeButton_Click" Margin="7,0">
-                                        <Border Width="140" Height="120" CornerRadius="8" Background="#3A3A3A" Padding="12">
-                                            <Grid>
-                                                <Border Height="18" VerticalAlignment="Top" Background="#FFFFFF" Opacity="0.25" CornerRadius="4"/>
-                                                <Border Width="48" HorizontalAlignment="Left" Margin="0,34,0,0" Background="#FFFFFF" Opacity="0.16" CornerRadius="4"/>
-                                                <Border Width="66" HorizontalAlignment="Right" Margin="0,34,0,0" Background="#FFFFFF" Opacity="0.36" CornerRadius="4"/>
-                                            </Grid>
-                                        </Border>
-                                    </Button>
-                                    <Button Tag="Purple" Style="{StaticResource PreviewButton}" Click="ThemeButton_Click" Margin="14,0,0,0">
-                                        <Border Width="140" Height="120" CornerRadius="8" Background="#3A3A3A" Padding="12">
-                                            <Grid>
-                                                <Border Height="18" VerticalAlignment="Top" Background="#BFA2FF" CornerRadius="4"/>
-                                                <Border Width="48" HorizontalAlignment="Left" Margin="0,34,0,0" Background="#7E61C9" CornerRadius="4"/>
-                                                <Border Width="66" HorizontalAlignment="Right" Margin="0,34,0,0" Background="#FFFFFF" Opacity="0.32" CornerRadius="4"/>
-                                            </Grid>
-                                        </Border>
-                                    </Button>
-                                </UniformGrid>
-                                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock x:Name="SelectedThemeText" Text="Seçili tema: Koyu" Foreground="#A8A8A8" VerticalAlignment="Center" Margin="0,0,16,0"/>
-                                    <Button Style="{StaticResource ArrowButton}" Click="ThemeNextButton_Click"/>
-                                </StackPanel>
+                    <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource Card}" Margin="7,0,0,7">
+                        <Grid><Grid.RowDefinitions><RowDefinition Height="68"/><RowDefinition Height="56"/><RowDefinition Height="*"/><RowDefinition Height="30"/></Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal"><TextBlock Text="&#xF1D8;" Style="{StaticResource IconText}" Foreground="#00558C" FontSize="38" Width="50"/><StackPanel Margin="8,0,0,0"><TextBlock Text="Uzak Bilgisayara Bağlan" FontSize="21" FontWeight="Bold"/><TextBlock Text="Uzaktaki bir cihaza bağlanın ve kontrol sağlayın." FontSize="12" Foreground="{StaticResource Muted}" Margin="0,4,0,0"/></StackPanel></StackPanel>
+                            <Grid Grid.Row="1"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="150"/></Grid.ColumnDefinitions><Grid><TextBox x:Name="PairingCodeInput" MaxLength="11" Background="White" BorderBrush="#A7B9CD" FontSize="15" TextChanged="PairingCodeInput_TextChanged" GotKeyboardFocus="PairingCodeInput_GotKeyboardFocus" LostKeyboardFocus="PairingCodeInput_LostKeyboardFocus"/><TextBlock x:Name="CodePlaceholder" Text="Bağlantı kodunu girin (örn. 123 456)" Foreground="#7B8AA0" Margin="10,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False"/></Grid><Button Grid.Column="1" Margin="10,0,0,0" Content="Bağlan   ›" Style="{StaticResource PrimaryButton}" Click="ConnectButton_Click"/></Grid>
+                            <UniformGrid Grid.Row="2" Columns="3" Margin="0,14,0,8"><Button x:Name="ViewModeButton" ToolTip="Yalnızca uzak ekranı izle" Padding="5,6" Style="{StaticResource OutlineButton}" Margin="0,0,5,0" Click="ViewModeButton_Click"><StackPanel><TextBlock Text="&#xF06E;" Style="{StaticResource IconText}" FontSize="24"/><TextBlock Text="Ekranı İzle" FontWeight="SemiBold" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,4,0,0"/><TextBlock Text="Yalnızca görüntü" FontSize="10" Foreground="{StaticResource Muted}" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,3,0,0"/></StackPanel></Button><Button x:Name="ControlModeButton" ToolTip="Uzak klavye ve fareyi kontrol et" Padding="5,6" Style="{StaticResource OutlineButton}" BorderBrush="#49AFFF" Background="#EAF6FF" Margin="5,0" Click="ControlModeButton_Click"><StackPanel><TextBlock Text="&#xF8CC;" Style="{StaticResource IconText}" Foreground="#075EA8" FontSize="24"/><TextBlock Text="Tam Kontrol" FontWeight="SemiBold" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,4,0,0"/><TextBlock Text="Klavye + fare" FontSize="10" Foreground="#3174AA" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,3,0,0"/></StackPanel></Button><Button x:Name="FileModeButton" ToolTip="Dosya gönder ve al" Padding="5,6" Style="{StaticResource OutlineButton}" Margin="5,0,0,0" Click="FileModeButton_Click"><StackPanel><TextBlock Text="&#xF574;" Style="{StaticResource IconText}" FontSize="24"/><TextBlock Text="Dosyalar" FontWeight="SemiBold" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,4,0,0"/><TextBlock Text="Gönder / al" FontSize="10" Foreground="{StaticResource Muted}" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,3,0,0"/></StackPanel></Button></UniformGrid>
+                            <Grid Grid.Row="3"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xF017;" Style="{StaticResource IconText}" FontSize="15" Foreground="#64748B"/><TextBlock Text="Hızlı bağlantı için cihazlarınızı kaydedin." FontSize="11" Foreground="{StaticResource Muted}" Margin="9,0,0,0" VerticalAlignment="Center"/></StackPanel><Button HorizontalAlignment="Right" Background="Transparent" BorderThickness="0" Foreground="#087DD1" Cursor="Hand" Click="SettingsNavButton_Click"><StackPanel Orientation="Horizontal"><TextBlock Text="&#xF013;" Style="{StaticResource IconText}" FontSize="15" Foreground="#087DD1"/><TextBlock Text="Gelişmiş Seçenekler⌄" FontSize="11" Margin="8,0,0,0"/></StackPanel></Button></Grid>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource Card}" Margin="0,7,7,7" Padding="18,12">
+                        <Grid><Grid.RowDefinitions><RowDefinition Height="52"/><RowDefinition Height="*"/></Grid.RowDefinitions><Grid><StackPanel Orientation="Horizontal"><TextBlock Text="&#xF017;" Style="{StaticResource IconText}" FontSize="27"/><StackPanel Margin="14,0,0,0"><TextBlock Text="Son Cihazlar" FontSize="17" FontWeight="Bold"/><TextBlock Text="En son bağlandığınız cihazlar." FontSize="10" Foreground="{StaticResource Muted}"/></StackPanel></StackPanel><Button HorizontalAlignment="Right" Background="Transparent" BorderThickness="0" Foreground="#087DD1" Content="Tümünü Gör" Cursor="Hand" Click="DevicesNavButton_Click"/></Grid>
+                            <Grid Grid.Row="1"><ListBox x:Name="DeviceList" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Auto"><ListBox.ItemContainerStyle><Style TargetType="ListBoxItem"><Setter Property="HorizontalContentAlignment" Value="Stretch"/><Setter Property="Padding" Value="0"/><Setter Property="Margin" Value="0"/><Setter Property="Background" Value="Transparent"/><Setter Property="BorderThickness" Value="0"/></Style></ListBox.ItemContainerStyle><ListBox.ItemTemplate><DataTemplate><Border BorderBrush="#E5EBF1" BorderThickness="0,1,0,0" Height="54"><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="72"/><ColumnDefinition Width="1.25*"/><ColumnDefinition Width="1*"/><ColumnDefinition Width="94"/><ColumnDefinition Width="38"/></Grid.ColumnDefinitions><Border Width="54" Height="38" BorderBrush="#CCD7E2" BorderThickness="1" CornerRadius="5" Background="#EEF5FA"><TextBlock Text="&#xF109;" Style="{StaticResource IconText}" FontSize="26" Foreground="#075EA8"/></Border><StackPanel Grid.Column="1" VerticalAlignment="Center"><TextBlock Text="{Binding DeviceName}" FontSize="12" FontWeight="SemiBold"/><TextBlock Text="{Binding Platform}" FontSize="10" Foreground="{StaticResource Muted}" Margin="0,3,0,0"/></StackPanel><StackPanel Grid.Column="2" VerticalAlignment="Center"><TextBlock Text="{Binding Status}" FontSize="10" Foreground="{Binding StatusBrush}"/><TextBlock Text="{Binding LastSeen}" FontSize="9" Foreground="{StaticResource Muted}" Margin="0,3,0,0"/></StackPanel><Button Grid.Column="3" Content="{Binding ConnectButtonText}" Style="{StaticResource OutlineButton}" Height="36" Padding="10,0" Tag="{Binding}" Click="RecentDeviceConnectButton_Click"/><Button Grid.Column="4" Style="{StaticResource IconButton}" ToolTip="Diğer seçenekler" Tag="{Binding}" Click="DeviceOptionsButton_Click"><TextBlock Text="&#xF142;" Style="{StaticResource IconText}" FontSize="20" Foreground="#45627A"/></Button></Grid></Border></DataTemplate></ListBox.ItemTemplate></ListBox><StackPanel x:Name="EmptyDevicesPanel" VerticalAlignment="Center"><TextBlock Text="&#xF109;" Style="{StaticResource IconText}" FontSize="30" Foreground="#9AABBA"/><TextBlock Text="Henüz bir cihaz bulunamadı" HorizontalAlignment="Center" FontWeight="SemiBold" Foreground="#536579" Margin="0,8,0,0"/><TextBlock Text="Diğer bilgisayarda KeyBridge'i açın." HorizontalAlignment="Center" FontSize="10" Foreground="{StaticResource Muted}" Margin="0,4,0,0"/></StackPanel></Grid>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource Card}" Margin="7,7,0,7" Padding="18,12">
+                        <Grid><Grid.RowDefinitions><RowDefinition Height="44"/><RowDefinition Height="*"/><RowDefinition Height="52"/></Grid.RowDefinitions><Grid><StackPanel Orientation="Horizontal"><TextBlock Text="&#xF109;" Style="{StaticResource IconText}" FontSize="25" Foreground="#0B4E79"/><TextBlock Text="Canlı Oturum" Margin="14,0,0,0" FontSize="17" FontWeight="Bold" VerticalAlignment="Center"/></StackPanel><Border HorizontalAlignment="Right" Background="#E6F8EF" CornerRadius="14" Padding="11,5" VerticalAlignment="Center"><StackPanel Orientation="Horizontal"><Ellipse Width="7" Height="7" Fill="{StaticResource Green}"/><TextBlock x:Name="SessionBadgeText" Text="Hazır" Foreground="#087A44" FontSize="10" Margin="7,0,0,0"/></StackPanel></Border></Grid>
+                            <Grid Grid.Row="1"><Grid.ColumnDefinitions><ColumnDefinition Width="1.35*"/><ColumnDefinition Width=".95*"/></Grid.ColumnDefinitions><Border Margin="0,0,18,8" CornerRadius="5" Background="#09273C" BorderBrush="#0B1C2B" BorderThickness="7"><Grid ClipToBounds="True"><Grid.Background><LinearGradientBrush StartPoint="0,1" EndPoint="1,0"><GradientStop Color="#071A2A" Offset="0"/><GradientStop Color="#0D6E9B" Offset=".48"/><GradientStop Color="#38A8E2" Offset="1"/></LinearGradientBrush></Grid.Background><Ellipse Width="210" Height="110" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,-38,0" Stroke="#46A4FF" StrokeThickness="22" RenderTransformOrigin=".5,.5"><Ellipse.RenderTransform><RotateTransform Angle="-24"/></Ellipse.RenderTransform></Ellipse><Ellipse Width="160" Height="80" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,22,0" Stroke="#1C63F5" StrokeThickness="18" RenderTransformOrigin=".5,.5"><Ellipse.RenderTransform><RotateTransform Angle="-24"/></Ellipse.RenderTransform></Ellipse><Border Height="16" VerticalAlignment="Bottom" Background="#09131D"><StackPanel Orientation="Horizontal" HorizontalAlignment="Center"><Ellipse Width="6" Height="6" Fill="#4AA8FF" Margin="2"/><Rectangle Width="7" Height="7" Fill="#F5F7FA" Margin="2"/><Ellipse Width="6" Height="6" Fill="#F7C548" Margin="2"/></StackPanel></Border><Image x:Name="RemoteScreenImage" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True"/><Button Panel.ZIndex="2" Style="{StaticResource IconButton}" Background="#55000000" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" ToolTip="Tam ekran görüntüle" Click="OpenFullScreenPreviewButton_Click"><TextBlock Text="&#xF065;" Style="{StaticResource IconText}" Foreground="White"/></Button></Grid></Border>
+                                <StackPanel Grid.Column="1"><TextBlock Text="Bağlı cihaz" FontSize="10" Foreground="{StaticResource Muted}"/><TextBlock x:Name="SessionDeviceNameText" Text="Cihaz bağlı değil" FontSize="12" FontWeight="SemiBold" Margin="0,4,0,14" TextTrimming="CharacterEllipsis"/><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Oturum süresi" FontSize="10" Foreground="{StaticResource Muted}"/><TextBlock x:Name="SessionDurationText" Text="00:00:00" FontSize="12" Margin="0,5,0,0"/></StackPanel><StackPanel Grid.Column="1"><TextBlock Text="Gecikme" FontSize="10" Foreground="{StaticResource Muted}"/><TextBlock x:Name="SessionLatencyText" Text="-- ms" FontSize="12" Foreground="#079455" Margin="0,5,0,0"/></StackPanel></Grid><TextBlock Text="Bağlantı kalitesi" FontSize="10" Foreground="{StaticResource Muted}" Margin="0,17,0,0"/><StackPanel Orientation="Horizontal" Margin="0,6,0,0"><TextBlock Text="&#xF012;" Style="{StaticResource IconText}" Foreground="{StaticResource Green}" FontSize="17"/><TextBlock x:Name="ConnectionQualityText" Text="Bekleniyor" Foreground="#079455" FontSize="11" Margin="12,0,0,0" VerticalAlignment="Center"/></StackPanel></StackPanel>
                             </Grid>
-                        </Border>
-                    </Grid>
+                            <Border Grid.Row="2" Background="#E7FAEF" CornerRadius="7" Padding="14,0"><Grid><StackPanel Orientation="Horizontal"><TextBlock Text="&#xF8CC;" Style="{StaticResource IconText}" Foreground="#079455"/><StackPanel Margin="13,0,0,0" VerticalAlignment="Center"><TextBlock x:Name="ControlStatusText" Text="Bağlantı bekleniyor" FontSize="11" FontWeight="SemiBold"/><TextBlock x:Name="ControlStatusSubText" Text="Bir cihaz bağlandığında burada görünecek." FontSize="9" Foreground="#128250"/></StackPanel></StackPanel><Button x:Name="DisconnectDeviceButton" HorizontalAlignment="Right" Content="Bağlantıyı Kes" Style="{StaticResource OutlineButton}" Foreground="#B42318" BorderBrush="#F97066" Visibility="Collapsed" Click="DisconnectDeviceButton_Click"/></Grid></Border>
+                        </Grid>
+                    </Border>
 
-                    <Grid x:Name="InputDevicesPage" Visibility="Collapsed">
-                        <Border Width="548" Height="388" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource CardBorder}" Padding="34,36,34,24">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="Kontrol Türü Seçin" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="36" HorizontalAlignment="Center"/>
-                                <UniformGrid x:Name="InputDeviceOptionsGrid" Grid.Row="1" Columns="2" Margin="82,50,82,20">
-                                    <CheckBox x:Name="KeyboardControlSetupCheckBox" Style="{StaticResource CardCheckBox}" Checked="InputControlCheckBox_Changed" Unchecked="InputControlCheckBox_Changed" Margin="0,0,24,0">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <Viewbox Width="62" Height="62" HorizontalAlignment="Center">
-                                                <Canvas Width="72" Height="72">
-                                                    <Rectangle Canvas.Left="8" Canvas.Top="18" Width="56" Height="38" RadiusX="5" RadiusY="5" Stroke="#FFFFFF" StrokeThickness="4" Fill="Transparent"/>
-                                                    <Line X1="18" Y1="30" X2="54" Y2="30" Stroke="#FFFFFF" StrokeThickness="4" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
-                                                    <Line X1="18" Y1="42" X2="54" Y2="42" Stroke="#FFFFFF" StrokeThickness="4" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
-                                                    <Line X1="27" Y1="22" X2="27" Y2="50" Stroke="#FFFFFF" StrokeThickness="3" Opacity="0.85"/>
-                                                    <Line X1="45" Y1="22" X2="45" Y2="50" Stroke="#FFFFFF" StrokeThickness="3" Opacity="0.85"/>
-                                                </Canvas>
-                                            </Viewbox>
-                                            <TextBlock Text="Klavye" Foreground="#FFFFFF" HorizontalAlignment="Center" Margin="0,12,0,0"/>
-                                        </StackPanel>
-                                    </CheckBox>
-                                    <CheckBox x:Name="MouseControlSetupCheckBox" Style="{StaticResource CardCheckBox}" Checked="InputControlCheckBox_Changed" Unchecked="InputControlCheckBox_Changed" Margin="24,0,0,0">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <Viewbox Width="62" Height="62" HorizontalAlignment="Center">
-                                                <Canvas Width="70" Height="70">
-                                                    <Path Data="M35,7 C48,7 58,18 58,34 L58,42 C58,56 48,65 35,65 C22,65 12,56 12,42 L12,34 C12,18 22,7 35,7 Z" Stroke="#FFFFFF" StrokeThickness="4" Fill="Transparent"/>
-                                                    <Line X1="35" Y1="10" X2="35" Y2="28" Stroke="#FFFFFF" StrokeThickness="4" StrokeStartLineCap="Round"/>
-                                                    <Line X1="12" Y1="34" X2="58" Y2="34" Stroke="#FFFFFF" StrokeThickness="4" Opacity="0.85"/>
-                                                </Canvas>
-                                            </Viewbox>
-                                            <TextBlock Text="Fare" Foreground="#FFFFFF" HorizontalAlignment="Center" Margin="0,12,0,0"/>
-                                        </StackPanel>
-                                    </CheckBox>
-                                </UniformGrid>
-                                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock x:Name="SelectedControlText" Text="Klavye ve fare kontrolü seçili." Foreground="#A8A8A8" VerticalAlignment="Center" Margin="0,0,16,0"/>
-                                    <Button x:Name="InputNextButton" Style="{StaticResource ArrowButton}" Click="InputDevicesNextButton_Click"/>
-                                </StackPanel>
-                            </Grid>
-                        </Border>
-                    </Grid>
+                    <Border Grid.Row="2" Grid.ColumnSpan="2" Background="White" BorderBrush="#D9E2EC" BorderThickness="1" CornerRadius="10" Margin="0,5,0,0">
+                        <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="1.35*"/><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal" Margin="18,0"><Border Width="39" Height="39" Background="#E8F4FC" CornerRadius="20"><TextBlock Text="&#xF3ED;" Style="{StaticResource IconText}" Foreground="#075EA8"/></Border><StackPanel Margin="12,0,0,0" VerticalAlignment="Center"><TextBlock Text="Güvenlik ve İzinler" FontSize="14" FontWeight="SemiBold"/><TextBlock Text="Bağlanan kullanıcılar için izinleri yönetin." FontSize="9" Foreground="{StaticResource Muted}"/></StackPanel></StackPanel>
+                            <Border Grid.Column="1" Margin="12,0" BorderBrush="#E2E8F0" BorderThickness="1,0,0,0"><Grid><TextBlock Text="&#xF11C;" Style="{StaticResource IconText}" HorizontalAlignment="Left" Margin="16,0,0,0"/><StackPanel Margin="50,0" VerticalAlignment="Center"><TextBlock Text="Klavye kontrolü" FontSize="12"/><TextBlock Text="İzin ver" FontSize="9" Foreground="{StaticResource Muted}"/></StackPanel><CheckBox x:Name="KeyboardControlCheckBox" Style="{StaticResource ToggleSwitch}" HorizontalAlignment="Right" Checked="InputControlCheckBox_Changed" Unchecked="InputControlCheckBox_Changed"/></Grid></Border>
+                            <Border Grid.Column="2" Margin="12,0" BorderBrush="#E2E8F0" BorderThickness="1,0,0,0"><Grid><TextBlock Text="&#xF8CC;" Style="{StaticResource IconText}" HorizontalAlignment="Left" Margin="16,0,0,0"/><StackPanel Margin="50,0" VerticalAlignment="Center"><TextBlock Text="Fare kontrolü" FontSize="12"/><TextBlock Text="İzin ver" FontSize="9" Foreground="{StaticResource Muted}"/></StackPanel><CheckBox x:Name="MouseControlCheckBox" Style="{StaticResource ToggleSwitch}" HorizontalAlignment="Right" Checked="InputControlCheckBox_Changed" Unchecked="InputControlCheckBox_Changed"/></Grid></Border>
+                            <Border Grid.Column="3" Margin="12,0" BorderBrush="#E2E8F0" BorderThickness="1,0,0,0"><Grid><TextBlock Text="&#xF0C5;" Style="{StaticResource IconText}" HorizontalAlignment="Left" Margin="16,0,0,0"/><StackPanel Margin="50,0" VerticalAlignment="Center"><TextBlock Text="Panoya erişim" FontSize="12"/><TextBlock Text="Metni eşitle" FontSize="9" Foreground="{StaticResource Muted}"/></StackPanel><CheckBox x:Name="ClipboardAccessCheckBox" Style="{StaticResource ToggleSwitch}" HorizontalAlignment="Right" Checked="ClipboardAccessCheckBox_Changed" Unchecked="ClipboardAccessCheckBox_Changed"/></Grid></Border>
+                            <Border Grid.Column="4" Margin="12,0" BorderBrush="#E2E8F0" BorderThickness="1,0,0,0"><Grid><TextBlock Text="&#xF023;" Style="{StaticResource IconText}" HorizontalAlignment="Left" Margin="16,0,0,0"/><StackPanel Margin="50,0" VerticalAlignment="Center"><TextBlock Text="Güvenli bağlantı" FontSize="12"/><TextBlock Text="AES-GCM etkin" FontSize="9" Foreground="{StaticResource Muted}"/></StackPanel><CheckBox IsChecked="True" IsEnabled="False" Style="{StaticResource ToggleSwitch}" HorizontalAlignment="Right"/></Grid></Border>
+                        </Grid>
+                    </Border>
 
-                    <Grid x:Name="RolePage" Visibility="Collapsed">
-                        <Border Width="548" Height="388" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource CardBorder}" Padding="34,36,34,24">
+                    <Grid x:Name="SectionPage" Grid.RowSpan="3" Grid.ColumnSpan="2" Panel.ZIndex="20" Visibility="Collapsed" Background="#F6F9FC">
+                        <Border Style="{StaticResource Card}" Margin="0">
                             <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="Cihaz Rolü Seçin" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="36" HorizontalAlignment="Center"/>
-                                <UniformGrid x:Name="RoleOptionsGrid" Grid.Row="1" Columns="2" Margin="82,50,82,20">
-                                    <Button Tag="Primary" Click="RoleButton_Click" Style="{StaticResource PreviewButton}" Width="140" Height="140" Margin="0,0,24,0">
-                                        <Border Width="140" Height="140" CornerRadius="8" Background="#3A3A3A">
-                                            <Grid>
-                                                <TextBlock Text="1" Foreground="#FFFFFF" FontSize="58" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-12,0,0"/>
-                                                <TextBlock Text="1. cihaz" Foreground="#FFFFFF" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,16"/>
-                                            </Grid>
-                                        </Border>
-                                    </Button>
-                                    <Button Tag="Secondary" Click="RoleButton_Click" Style="{StaticResource PreviewButton}" Width="140" Height="140" Margin="24,0,0,0">
-                                        <Border Width="140" Height="140" CornerRadius="8" Background="#3A3A3A">
-                                            <Grid>
-                                                <TextBlock Text="2" Foreground="#FFFFFF" FontSize="58" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-12,0,0"/>
-                                                <TextBlock Text="2. cihaz" Foreground="#FFFFFF" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,16"/>
-                                            </Grid>
-                                        </Border>
-                                    </Button>
-                                </UniformGrid>
-                                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock x:Name="SelectedRoleText" Text="Seçili rol: 1. cihaz" Foreground="#A8A8A8" VerticalAlignment="Center" Margin="0,0,16,0"/>
-                                    <Button Style="{StaticResource ArrowButton}" Click="RoleNextButton_Click"/>
-                                </StackPanel>
-                            </Grid>
-                        </Border>
-                    </Grid>
-
-                    <Grid x:Name="DevicesPage" Visibility="Collapsed">
-                        <Border Width="920" MinHeight="610" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource CardBorder}" Padding="34">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+                                <Grid.RowDefinitions><RowDefinition Height="68"/><RowDefinition Height="*"/></Grid.RowDefinitions>
                                 <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0">
-                                        <TextBlock Text="Aynı ağdaki cihazlar" Style="{StaticResource TitleText}"/>
-                                        <TextBlock Text="Diğer bilgisayarı seçin, kod üretin veya gelen kodu girin." Style="{StaticResource BodyText}" Margin="0,8,0,0"/>
-                                    </StackPanel>
-                                    <Button Grid.Column="1" Content="Yenile" Style="{StaticResource GhostButton}" Click="RefreshDevicesButton_Click" Width="88" Height="42" Margin="18,6,0,0"/>
+                                    <StackPanel><TextBlock x:Name="SectionTitleText" Text="Cihazlar" FontSize="24" FontWeight="Bold"/><TextBlock x:Name="SectionSubtitleText" Text="Yerel ağdaki cihazlar" FontSize="11" Foreground="{StaticResource Muted}" Margin="0,5,0,0"/></StackPanel>
+                                    <Button HorizontalAlignment="Right" Content="Ana Sayfaya Dön" Style="{StaticResource OutlineButton}" Click="CloseSectionButton_Click"/>
                                 </Grid>
-
-                                <Grid x:Name="DevicesContentGrid" Grid.Row="1" Margin="0,26,0,0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition x:Name="DevicesListColumn" Width="1.1*"/>
-                                        <ColumnDefinition x:Name="DevicesPairColumn" Width="0.9*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <Border x:Name="DevicesListCard" Style="{StaticResource CardBorder}" Background="{DynamicResource PanelAltBrush}" Margin="0,0,12,0">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="260"/>
-                                            </Grid.RowDefinitions>
-                                            <TextBlock Text="Bulunan cihazlar" Style="{StaticResource SectionText}"/>
-                                            <ListBox x:Name="DeviceList" Grid.Row="1" Margin="0,14,0,0" SelectionChanged="DeviceList_SelectionChanged">
-                                                <ListBox.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Grid>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="Auto"/>
-                                                                <RowDefinition Height="Auto"/>
-                                                            </Grid.RowDefinitions>
-                                                            <TextBlock Text="{Binding DeviceName}" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="SemiBold" FontSize="15"/>
-                                                            <TextBlock Grid.Row="1" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="12" Margin="0,4,0,0">
-                                                                <Run Text="{Binding IpAddress}"/>
-                                                                <Run Text="  -  "/>
-                                                                <Run Text="{Binding Role}"/>
-                                                            </TextBlock>
-                                                        </Grid>
-                                                    </DataTemplate>
-                                                </ListBox.ItemTemplate>
-                                            </ListBox>
-                                        </Grid>
-                                    </Border>
-
-                                    <StackPanel x:Name="DevicesPairingPanel" Grid.Column="1" Margin="12,0,0,0">
-                                        <Border Style="{StaticResource CardBorder}" Background="{DynamicResource PanelAltBrush}">
-                                            <StackPanel>
-                                                <TextBlock Text="Bu cihazda kod üret" Style="{StaticResource SectionText}"/>
-                                                <Button Content="Eşleşme kodu üret" Style="{StaticResource GhostButton}" Click="GenerateCodeButton_Click" Margin="0,14,0,0"/>
-                                                <TextBlock x:Name="PairingCodeText" Text="Kod: ------" Foreground="{DynamicResource WarningBrush}" FontSize="28" FontWeight="Bold" Margin="0,16,0,0"/>
-                                            </StackPanel>
-                                        </Border>
-
-                                        <Border Style="{StaticResource CardBorder}" Background="{DynamicResource PanelAltBrush}" Margin="0,18,0,0">
-                                            <StackPanel>
-                                                <TextBlock Text="Diğer cihazdaki kodu gir" Style="{StaticResource SectionText}"/>
-                                                <TextBox x:Name="PairingCodeInput" MaxLength="6" Margin="0,14,0,12"/>
-                                                <Button Content="Kodu onayla ve eşleştir" Style="{StaticResource PrimaryButton}" Click="PairWithCodeButton_Click"/>
-                                            </StackPanel>
-                                        </Border>
-
-                                        <Button x:Name="OpenDashboardAfterPairButton" Content="Kontrol paneline geç" Style="{StaticResource GhostButton}" Click="OpenDashboardButton_Click" Margin="0,18,0,0"/>
-                                    </StackPanel>
-                                </Grid>
-                            </Grid>
-                        </Border>
-                    </Grid>
-
-                    <Grid x:Name="DashboardPage" Visibility="Collapsed">
-                        <Border Width="920" MinHeight="560" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource CardBorder}" Padding="34">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0">
-                                        <TextBlock Text="Kontrol paneli" Style="{StaticResource TitleText}"/>
-                                        <TextBlock x:Name="DashboardSummaryText" Text="Kontrol bu bilgisayarda." Style="{StaticResource BodyText}" Margin="0,8,0,0"/>
-                                    </StackPanel>
-                                    <Border x:Name="ConnectionStatusBadge" Grid.Column="1" Background="#17342E" CornerRadius="16" Padding="12,7" VerticalAlignment="Top" Margin="18,5,0,0">
-                                        <StackPanel Orientation="Horizontal">
-                                            <Ellipse x:Name="ConnectionStatusDot" Width="8" Height="8" Fill="#35D6AA" VerticalAlignment="Center"/>
-                                            <TextBlock x:Name="ConnectionStatusText" Text="BAĞLI" Foreground="#EAFBF6" FontSize="11" FontWeight="Bold" Margin="8,0,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Button x:Name="DashboardButton" Grid.Column="2" ToolTip="Ayarları aç" Width="40" Height="38" MinHeight="38" Padding="0" Style="{StaticResource GhostButton}" Click="DashboardButton_Click" Margin="12,0,0,0">
-                                        <Viewbox Width="17" Height="17">
-                                            <Path Data="M2,4 L14,4 M5,2 L5,6 M2,8 L14,8 M10,6 L10,10 M2,12 L14,12 M7,10 L7,14" Stroke="{DynamicResource TextPrimaryBrush}" StrokeThickness="1.7" StrokeStartLineCap="Round"/>
-                                        </Viewbox>
-                                    </Button>
-                                </Grid>
-
-                                <Grid x:Name="DashboardContentGrid" Grid.Row="1" Margin="0,28,0,0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition x:Name="DashboardLeftColumn" Width="1.1*"/>
-                                        <ColumnDefinition x:Name="DashboardRightColumn" Width="0.9*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <Border x:Name="DashboardPairedCard" Style="{StaticResource CardBorder}" Background="{DynamicResource PanelAltBrush}" Padding="24" Margin="0,0,12,18">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="Auto"/>
-                                            </Grid.RowDefinitions>
-                                            <TextBlock Text="BAĞLI CİHAZ" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" FontWeight="Bold"/>
-                                            <StackPanel Grid.Row="1" Margin="0,13,0,0">
-                                                <TextBlock x:Name="PairedDeviceNameText" Text="Cihaz bağlı değil" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="22" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
-                                                <TextBlock x:Name="PairedDeviceText" Text="Henüz cihaz eşleşmedi." Style="{StaticResource BodyText}" Margin="0,5,0,0"/>
-                                            </StackPanel>
-                                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,20,0,0">
-                                                <Button x:Name="ToggleRemoteButton" Content="Diğer bilgisayara geç" Style="{StaticResource PrimaryButton}" Click="ToggleRemoteButton_Click" MinWidth="170"/>
-                                                <Button x:Name="DisconnectDeviceButton" Content="Bağlantıyı kes" ToolTip="İki cihazdaki eşleşmeyi kaldır" Style="{StaticResource DangerButton}" Click="DisconnectDeviceButton_Click" Margin="10,0,0,0"/>
-                                            </StackPanel>
-                                        </Grid>
-                                    </Border>
-
-                                    <Border x:Name="DashboardHotkeyCard" Grid.Column="1" Style="{StaticResource CardBorder}" Background="{DynamicResource PanelAltBrush}" Padding="24" Margin="12,0,0,18">
-                                        <StackPanel>
-                                            <TextBlock Text="HIZLI GEÇİŞ" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" FontWeight="Bold"/>
-                                            <Border Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource BorderBrushSoft}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="0,13,0,0">
-                                                <TextBlock Text="Ctrl  +  Alt  +  K" Foreground="{DynamicResource TextPrimaryBrush}" FontFamily="Consolas" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                            </Border>
-                                            <TextBlock x:Name="HotkeyText" Text="Bilgisayarlar arasında istediğiniz an geçiş yapın." Style="{StaticResource BodyText}" Margin="0,10,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-
-                                    <Border x:Name="DashboardSettingsCard" Grid.Row="1" Style="{StaticResource CardBorder}" Background="{DynamicResource PanelAltBrush}" Padding="24" Margin="0,0,12,0">
-                                        <StackPanel>
-                                            <TextBlock Text="PAYLAŞILAN GİRİŞLER" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" FontWeight="Bold"/>
-                                            <TextBlock x:Name="EnabledInputsText" Text="Klavye ve fare kontrolü seçili." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="16" FontWeight="SemiBold" Margin="0,12,0,0" TextWrapping="Wrap"/>
-                                            <Button Content="Giriş ayarlarını değiştir" Style="{StaticResource GhostButton}" Click="DashboardButton_Click" HorizontalAlignment="Left" Margin="0,16,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-
-                                    <Border x:Name="DashboardPairingCard" Grid.Row="1" Grid.Column="1" Style="{StaticResource CardBorder}" Background="{DynamicResource PanelAltBrush}" Padding="24" Margin="12,0,0,0">
-                                        <StackPanel>
-                                            <TextBlock Text="OTURUM" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" FontWeight="Bold"/>
-                                            <TextBlock x:Name="CurrentControlText" Text="Kontrol: Bu bilgisayar" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="16" FontWeight="SemiBold" Margin="0,12,0,0"/>
-                                            <TextBlock x:Name="BridgeStatsText" Text="Gönderilen 0 · Alınan 0" Style="{StaticResource BodyText}" Margin="0,7,0,0"/>
-                                            <Button Content="Cihazları yönet" Style="{StaticResource GhostButton}" Click="GoToDevicesButton_Click" HorizontalAlignment="Left" Margin="0,16,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                </Grid>
+                                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"><StackPanel x:Name="SectionContentPanel" Margin="0,8,0,0"/></ScrollViewer>
                             </Grid>
                         </Border>
                     </Grid>
                 </Grid>
+                </ScrollViewer>
             </Grid>
         </Grid>
 
-        <StackPanel x:Name="WindowControlsPanel"
-                    Panel.ZIndex="30"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Margin="0,18,20,0">
-            <Button Content="−" Style="{StaticResource WindowControlButton}" Click="MinimizeWindowButton_Click" Margin="0,0,6,0"/>
-            <Button x:Name="MaximizeWindowButton" Content="□" Style="{StaticResource WindowControlButton}" Click="MaximizeWindowButton_Click" Margin="0,0,6,0"/>
-            <Button Content="×" Style="{StaticResource WindowControlButton}" Click="CloseWindowButton_Click"/>
-        </StackPanel>
-
-        <Grid x:Name="SettingsModal" Panel.ZIndex="60" Visibility="Collapsed" Background="#99000000" MouseLeftButtonDown="SettingsModal_MouseLeftButtonDown">
-            <Border Width="640"
-                    Height="430"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    Background="{DynamicResource PanelBrush}"
-                    BorderBrush="{DynamicResource BorderBrushSoft}"
-                    BorderThickness="1"
-                    CornerRadius="16"
-                    ClipToBounds="True">
+        <Popup x:Name="NotificationPopup" PlacementTarget="{Binding ElementName=NotificationButton}" Placement="Bottom" HorizontalOffset="-306" VerticalOffset="8" StaysOpen="False" AllowsTransparency="True" PopupAnimation="Fade">
+            <Border Width="360" MaxHeight="430" Background="White" BorderBrush="#D4DEE8" BorderThickness="1" CornerRadius="8" Padding="0">
+                <Border.Effect><DropShadowEffect BlurRadius="22" ShadowDepth="5" Opacity=".22" Color="#26384A"/></Border.Effect>
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="158"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Border Grid.Column="0" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource BorderBrushSoft}" BorderThickness="0,0,1,0">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="52"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <StackPanel Orientation="Horizontal" Margin="14,0,0,0" VerticalAlignment="Center">
-                                <Border Width="22" Height="22" CornerRadius="6" Background="{DynamicResource AccentDarkBrush}">
-                                    <TextBlock Text="K" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                                <TextBlock Text="Ayarlar" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="SemiBold" FontSize="14" Margin="9,0,0,0" VerticalAlignment="Center"/>
-                            </StackPanel>
-                            <StackPanel Grid.Row="1" Margin="8,10,8,0">
-                                <Button x:Name="SettingsGeneralNavButton" Tag="General" Style="{StaticResource SettingsNavButton}" Click="SettingsNavButton_Click" Margin="0,0,0,5">
-                                    <StackPanel Orientation="Horizontal">
-                                        <Viewbox Width="16" Height="16" Margin="0,0,10,0">
-                                            <Path Data="M2,4 L14,4 M5,2 L5,6 M2,8 L14,8 M10,6 L10,10 M2,12 L14,12 M7,10 L7,14" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="1.7" StrokeStartLineCap="Round"/>
-                                        </Viewbox>
-                                        <TextBlock Text="Genel" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
-                                <Button x:Name="SettingsDownloadsNavButton" Tag="Downloads" Style="{StaticResource SettingsNavButton}" Click="SettingsNavButton_Click" Margin="0,0,0,5">
-                                    <StackPanel Orientation="Horizontal">
-                                        <Viewbox Width="16" Height="16" Margin="0,0,10,0">
-                                            <Path Data="M8,2 L8,10 M4.5,6.5 L8,10 L11.5,6.5 M2,13 L14,13" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="1.7" StrokeStartLineCap="Round" StrokeLineJoin="Round"/>
-                                        </Viewbox>
-                                        <TextBlock Text="Paketler" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
-                                <Button x:Name="SettingsThemeNavButton" Tag="Theme" Style="{StaticResource SettingsNavButton}" Click="SettingsNavButton_Click" Margin="0,0,0,5">
-                                    <StackPanel Orientation="Horizontal">
-                                        <Viewbox Width="16" Height="16" Margin="0,0,10,0">
-                                            <Path Data="M8,2 A6,6 0 1 0 8,14 A6,6 0 1 0 8,2 M8,5 A3,3 0 1 0 8,11 A3,3 0 1 0 8,5" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="1.5" Fill="Transparent"/>
-                                        </Viewbox>
-                                        <TextBlock Text="Tema" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
-                                <Button x:Name="SettingsAboutNavButton" Tag="About" Style="{StaticResource SettingsNavButton}" Click="SettingsNavButton_Click">
-                                    <StackPanel Orientation="Horizontal">
-                                        <Viewbox Width="16" Height="16" Margin="0,0,10,0">
-                                            <Path Data="M8,2 A6,6 0 1 0 8,14 A6,6 0 1 0 8,2 M8,7 L8,11 M8,5 L8,5.1" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="1.7" StrokeStartLineCap="Round"/>
-                                        </Viewbox>
-                                        <TextBlock Text="Hakkında" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="52"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="60"/>
-                        </Grid.RowDefinitions>
-
-                        <Grid Grid.Row="0" Margin="20,0,14,0">
-                            <TextBlock x:Name="SettingsTitleText" Text="Genel Ayarlar" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="SemiBold" FontSize="16" VerticalAlignment="Center"/>
-                            <Button Style="{StaticResource ModalCloseButton}" ToolTip="Ayarları kapat" HorizontalAlignment="Right" VerticalAlignment="Center" Click="CloseSettingsButton_Click">
-                                <Viewbox Width="11" Height="11">
-                                    <Path Data="M2,2 L10,10 M10,2 L2,10" Stroke="{DynamicResource TextSecondaryBrush}" StrokeThickness="1.8" StrokeStartLineCap="Round"/>
-                                </Viewbox>
-                            </Button>
-                        </Grid>
-
-                        <Grid Grid.Row="1" Margin="20,14,20,0">
-                            <StackPanel x:Name="SettingsGeneralPage">
-                                <Border Style="{StaticResource SettingsRowBorder}">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="132"/>
-                                        </Grid.ColumnDefinitions>
-                                        <StackPanel>
-                                            <TextBlock Text="Dil" Style="{StaticResource SettingsLabelText}"/>
-                                            <TextBlock Text="Arayüz dilini değiştir" Style="{StaticResource SettingsDescriptionText}"/>
-                                        </StackPanel>
-                                        <ComboBox x:Name="SettingsLanguageComboBox" Grid.Column="1" Height="34" MinHeight="34" Padding="10,5" FontSize="13" SelectedIndex="1" SelectionChanged="LanguageComboBox_SelectionChanged">
-                                            <ComboBoxItem Tag="Turkish" Content="Türkçe"/>
-                                            <ComboBoxItem Tag="English" Content="English"/>
-                                        </ComboBox>
-                                    </Grid>
-                                </Border>
-
-                                <Border Style="{StaticResource SettingsRowBorder}">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <StackPanel>
-                                            <TextBlock Text="Otomatik başlat" Style="{StaticResource SettingsLabelText}"/>
-                                            <TextBlock Text="Windows açıldığında KeyBridge'i çalıştır" Style="{StaticResource SettingsDescriptionText}"/>
-                                        </StackPanel>
-                                        <CheckBox x:Name="AutoStartCheckBox" Grid.Column="1" Style="{StaticResource SwitchCheckBox}" VerticalAlignment="Center" Checked="AutoStartCheckBox_Changed" Unchecked="AutoStartCheckBox_Changed"/>
-                                    </Grid>
-                                </Border>
-
-                                <Border Style="{StaticResource SettingsRowBorder}">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <StackPanel>
-                                            <TextBlock Text="Paylaşılan girişler" Style="{StaticResource SettingsLabelText}"/>
-                                            <TextBlock Text="Diğer bilgisayara gönderilecek girişleri seç" Style="{StaticResource SettingsDescriptionText}"/>
-                                        </StackPanel>
-                                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                                            <CheckBox x:Name="KeyboardControlCheckBox" Content="Klavye" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="12" Checked="InputControlCheckBox_Changed" Unchecked="InputControlCheckBox_Changed" Margin="0,0,12,0"/>
-                                            <CheckBox x:Name="MouseControlCheckBox" Content="Fare" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="12" Checked="InputControlCheckBox_Changed" Unchecked="InputControlCheckBox_Changed"/>
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-                            </StackPanel>
-
-                            <StackPanel x:Name="SettingsDownloadsPage" Visibility="Collapsed">
-                                <Border Style="{StaticResource SettingsRowBorder}">
-                                    <StackPanel>
-                                        <TextBlock Text="Taşınabilir Windows paketi" Style="{StaticResource SettingsLabelText}"/>
-                                        <TextBlock Text="EXE ve ZIP çıktıları artifacts klasöründe oluşturulur." Style="{StaticResource SettingsDescriptionText}"/>
-                                    </StackPanel>
-                                </Border>
-                            </StackPanel>
-
-                            <StackPanel x:Name="SettingsThemePage" Visibility="Collapsed">
-                                <Border Style="{StaticResource SettingsRowBorder}">
-                                    <StackPanel>
-                                        <TextBlock Text="Görünüm" Style="{StaticResource SettingsLabelText}" Margin="0,0,0,10"/>
-                                        <UniformGrid Columns="3">
-                                            <Button Content="Açık" Style="{StaticResource GhostButton}" Tag="Light" Click="ThemeButton_Click" Margin="0,0,6,0"/>
-                                            <Button Content="Koyu" Style="{StaticResource GhostButton}" Tag="Dark" Click="ThemeButton_Click" Margin="3,0"/>
-                                            <Button Content="Mor" Style="{StaticResource GhostButton}" Tag="Purple" Click="ThemeButton_Click" Margin="6,0,0,0"/>
-                                        </UniformGrid>
-                                    </StackPanel>
-                                </Border>
-                            </StackPanel>
-
-                            <StackPanel x:Name="SettingsAboutPage" Visibility="Collapsed">
-                                <Border Style="{StaticResource SettingsRowBorder}">
-                                    <StackPanel>
-                                        <TextBlock Text="KeyBridge 0.2.0" Style="{StaticResource SettingsLabelText}"/>
-                                        <TextBlock Text="Aynı ağdaki iki Windows bilgisayarı tek klavye ve fareyle kontrol edin." Style="{StaticResource SettingsDescriptionText}"/>
-                                    </StackPanel>
-                                </Border>
-                            </StackPanel>
-                        </Grid>
-
-                        <Border Grid.Row="2" BorderBrush="{DynamicResource BorderBrushSoft}" BorderThickness="0,1,0,0">
-                            <Button Content="Tamam" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="92" MinHeight="36" Padding="12,7" Margin="0,0,20,0" Click="CloseSettingsButton_Click"/>
-                        </Border>
+                    <Grid.RowDefinitions><RowDefinition Height="58"/><RowDefinition Height="Auto"/><RowDefinition Height="48"/></Grid.RowDefinitions>
+                    <Grid Margin="18,0">
+                        <TextBlock Text="Bildirimler" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        <Button HorizontalAlignment="Right" Content="Temizle" Background="Transparent" BorderThickness="0" Foreground="#087DD1" Cursor="Hand" Click="ClearNotificationsButton_Click"/>
                     </Grid>
+                    <Border Grid.Row="1" BorderBrush="#E5EBF1" BorderThickness="0,1,0,1">
+                        <ScrollViewer MaxHeight="310" VerticalScrollBarVisibility="Auto">
+                            <Grid>
+                                <TextBlock x:Name="NotificationEmptyText" Text="Henüz bildirim yok." Margin="18,24" Foreground="{StaticResource Muted}" HorizontalAlignment="Center"/>
+                                <StackPanel x:Name="NotificationItemsPanel"/>
+                            </Grid>
+                        </ScrollViewer>
+                    </Border>
+                    <Button Grid.Row="2" Content="Tüm bildirimleri gör" Background="Transparent" BorderThickness="0" Foreground="#087DD1" FontWeight="SemiBold" Cursor="Hand" Click="OpenNotificationHistoryButton_Click"/>
+                </Grid>
+            </Border>
+        </Popup>
+
+        <Grid x:Name="SettingsModal" Panel.ZIndex="50" Visibility="Collapsed" Background="#660B1726" MouseLeftButtonDown="SettingsModal_MouseLeftButtonDown">
+            <Border Width="640" Height="640" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White" BorderBrush="#D6E0E9" BorderThickness="1" CornerRadius="10" Padding="24" MouseLeftButtonDown="SettingsCard_MouseLeftButtonDown">
+                <Grid>
+                    <Grid.RowDefinitions><RowDefinition Height="58"/><RowDefinition Height="*"/><RowDefinition Height="52"/></Grid.RowDefinitions>
+                    <Grid><StackPanel><TextBlock Text="Ayarlar" FontSize="21" FontWeight="Bold"/><TextBlock Text="Cihaz, izin ve bağlantı tercihlerini yönetin." FontSize="11" Foreground="{StaticResource Muted}"/></StackPanel><Button HorizontalAlignment="Right" Style="{StaticResource IconButton}" Click="CloseSettingsButton_Click"><TextBlock Text="&#xF00D;" Style="{StaticResource IconText}"/></Button></Grid>
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"><StackPanel Margin="0,10,8,8">
+                        <Border Background="#F5F8FA" CornerRadius="8" Padding="16" Margin="0,0,0,9"><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="240"/><ColumnDefinition Width="84"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Cihaz adı" FontWeight="SemiBold"/><TextBlock Text="Ağdaki diğer cihazlarda görünen ad." FontSize="11" Foreground="{StaticResource Muted}" Margin="0,4,0,0"/></StackPanel><TextBox x:Name="SettingsDeviceNameTextBox" Grid.Column="1" Height="36"/><Button Grid.Column="2" Content="Kaydet" Height="36" Margin="8,0,0,0" Style="{StaticResource OutlineButton}" Click="SaveDeviceNameButton_Click"/></Grid></Border>
+                        <Border Background="#F5F8FA" CornerRadius="8" Padding="16" Margin="0,0,0,9"><Grid><StackPanel><TextBlock Text="Windows ile başlat" FontWeight="SemiBold"/><TextBlock Text="Bilgisayar açıldığında KeyBridge hazır olsun." FontSize="11" Foreground="{StaticResource Muted}" Margin="0,4,0,0"/></StackPanel><CheckBox x:Name="AutoStartCheckBox" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleSwitch}" Checked="AutoStartCheckBox_Changed" Unchecked="AutoStartCheckBox_Changed"/></Grid></Border>
+                        <Border Background="#F5F8FA" CornerRadius="8" Padding="16" Margin="0,0,0,9"><Grid><StackPanel><TextBlock Text="Klavye kontrolü" FontWeight="SemiBold"/><TextBlock Text="Eşleşmiş cihazdan klavye girdisini kabul et." FontSize="11" Foreground="{StaticResource Muted}" Margin="0,4,0,0"/></StackPanel><CheckBox x:Name="SettingsKeyboardControlCheckBox" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleSwitch}" Checked="SettingsInputCheckBox_Changed" Unchecked="SettingsInputCheckBox_Changed"/></Grid></Border>
+                        <Border Background="#F5F8FA" CornerRadius="8" Padding="16" Margin="0,0,0,9"><Grid><StackPanel><TextBlock Text="Fare kontrolü" FontWeight="SemiBold"/><TextBlock Text="Eşleşmiş cihazdan fare girdisini kabul et." FontSize="11" Foreground="{StaticResource Muted}" Margin="0,4,0,0"/></StackPanel><CheckBox x:Name="SettingsMouseControlCheckBox" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleSwitch}" Checked="SettingsInputCheckBox_Changed" Unchecked="SettingsInputCheckBox_Changed"/></Grid></Border>
+                        <Border Background="#F5F8FA" CornerRadius="8" Padding="16" Margin="0,0,0,9"><Grid><StackPanel><TextBlock Text="Metin panosunu eşitle" FontWeight="SemiBold"/><TextBlock Text="Açıldığında kopyalanan metin eşleşmiş cihaza şifreli gönderilir." FontSize="11" Foreground="{StaticResource Muted}" Margin="0,4,0,0"/></StackPanel><CheckBox x:Name="SettingsClipboardAccessCheckBox" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleSwitch}" Checked="SettingsClipboardCheckBox_Changed" Unchecked="SettingsClipboardCheckBox_Changed"/></Grid></Border>
+                        <Border Background="#F5F8FA" CornerRadius="8" Padding="16" Margin="0,0,0,9"><Grid><StackPanel><TextBlock Text="Alınan dosyalar" FontWeight="SemiBold"/><TextBlock Text="İndirilenler\KeyBridge Transfers" FontSize="11" Foreground="{StaticResource Muted}" Margin="0,4,0,0"/></StackPanel><Button HorizontalAlignment="Right" Content="Klasörü Aç" Style="{StaticResource OutlineButton}" Click="OpenTransfersFolderButton_Click"/></Grid></Border>
+                        <Border Background="#F5F8FA" CornerRadius="8" Padding="16" Margin="0,0,0,9"><StackPanel><TextBlock Text="Kontrol kısayolu" FontWeight="SemiBold"/><TextBlock Text="Bilgisayarlar arasında geçiş: Ctrl + Alt + K" FontSize="11" Foreground="{StaticResource Muted}" Margin="0,4,0,0"/></StackPanel></Border>
+                        <Border Background="#FFF8E7" CornerRadius="8" Padding="16"><StackPanel><TextBlock Text="Yerel ağ bağlantısı" FontWeight="SemiBold" Foreground="#9A6700"/><TextBlock Text="Oturum trafiği AES-GCM ile korunur. Otomatik keşif yalnızca aynı yerel ağda çalışır; farklı ağlardan bağlantı bu sürümde desteklenmez." FontSize="11" Foreground="#795700" Margin="0,4,0,0" TextWrapping="Wrap"/></StackPanel></Border>
+                    </StackPanel></ScrollViewer>
+                    <Button Grid.Row="2" HorizontalAlignment="Right" Width="96" Height="38" Content="Tamam" Style="{StaticResource PrimaryButton}" Click="CloseSettingsButton_Click"/>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Grid x:Name="FirstRunModal" Panel.ZIndex="70" Visibility="Collapsed" Background="#E60B1726">
+            <Border Width="650" Height="560" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White" BorderBrush="#D6E0E9" BorderThickness="1" CornerRadius="12" Padding="34">
+                <Grid>
+                    <Grid.RowDefinitions><RowDefinition Height="90"/><RowDefinition Height="*"/><RowDefinition Height="62"/></Grid.RowDefinitions>
+                    <StackPanel><TextBlock Text="KeyBridge'i Hazırlayalım" FontSize="28" FontWeight="Bold"/><TextBlock Text="Bu ayarları daha sonra Ayarlar bölümünden değiştirebilirsiniz." FontSize="12" Foreground="{StaticResource Muted}" Margin="0,8,0,0"/></StackPanel>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock Text="Bu bilgisayarın adı" FontWeight="SemiBold"/><TextBox x:Name="OnboardingDeviceNameTextBox" Height="44" Margin="0,8,0,18"/>
+                        <Border Background="#F5F8FA" CornerRadius="8" Padding="16" Margin="0,0,0,10"><Grid><StackPanel><TextBlock Text="Klavye kontrolüne izin ver" FontWeight="SemiBold"/><TextBlock Text="Eşleşmiş bilgisayar klavyeyi kontrol edebilir." FontSize="11" Foreground="{StaticResource Muted}"/></StackPanel><CheckBox x:Name="OnboardingKeyboardCheckBox" IsChecked="True" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleSwitch}"/></Grid></Border>
+                        <Border Background="#F5F8FA" CornerRadius="8" Padding="16" Margin="0,0,0,10"><Grid><StackPanel><TextBlock Text="Fare kontrolüne izin ver" FontWeight="SemiBold"/><TextBlock Text="Eşleşmiş bilgisayar fareyi kontrol edebilir." FontSize="11" Foreground="{StaticResource Muted}"/></StackPanel><CheckBox x:Name="OnboardingMouseCheckBox" IsChecked="True" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleSwitch}"/></Grid></Border>
+                        <Border Background="#F5F8FA" CornerRadius="8" Padding="16"><Grid><StackPanel><TextBlock Text="Metin panosunu eşitle" FontWeight="SemiBold"/><TextBlock Text="Gizlilik için varsayılan olarak kapalıdır." FontSize="11" Foreground="{StaticResource Muted}"/></StackPanel><CheckBox x:Name="OnboardingClipboardCheckBox" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleSwitch}"/></Grid></Border>
+                        <TextBlock Text="Otomatik cihaz keşfi yalnızca aynı yerel ağda çalışır. Oturum verileri eşleşmeden sonra AES-GCM ile korunur." FontSize="11" Foreground="#795700" Margin="0,18,0,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <Button Grid.Row="2" Content="Kurulumu Tamamla" HorizontalAlignment="Right" Width="190" Style="{StaticResource PrimaryButton}" Click="CompleteOnboardingButton_Click"/>
                 </Grid>
             </Border>
         </Grid>

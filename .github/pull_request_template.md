@@ -1,13 +1,13 @@
-## Değişiklik
+## Summary
 
-Bu pull request neyi ve neden değiştiriyor?
+What does this pull request change, and why?
 
-## Doğrulama
+## Verification
 
-- [ ] `dotnet build .\KeyBridge.sln -c Release` başarılı
-- [ ] İlgili akış Windows üzerinde elle denendi
-- [ ] Kullanıcıya görünen değişiklikler `CHANGELOG.md` dosyasına eklendi
+- [ ] `dotnet build .\KeyBridge.sln -c Release` succeeds
+- [ ] The affected flow was tested on Windows (on two PCs if it changes networking/input)
+- [ ] User-visible changes are documented in `CHANGELOG.md` or the README
 
-## Görsel değişiklikler
+## Visual changes
 
-Varsa önce/sonra ekran görüntülerini ekleyin.
+Add before/after screenshots when relevant, with connection codes and private information removed.

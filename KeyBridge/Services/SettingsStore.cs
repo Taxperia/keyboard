@@ -16,9 +16,9 @@ public sealed class SettingsStore
 
     private readonly SemaphoreSlim _gate = new(1, 1);
 
-    public string SettingsDirectory { get; } = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "KeyBridge");
+    public string SettingsDirectory { get; } =
+        Environment.GetEnvironmentVariable("KEYBRIDGE_SETTINGS_DIR") ??
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KeyBridge");
 
     public string SettingsPath => Path.Combine(SettingsDirectory, "settings.json");
 
